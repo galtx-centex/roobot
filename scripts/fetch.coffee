@@ -13,14 +13,14 @@ module.exports =
     Fs.stat repoPath, (err, stats) ->
       if err
         # Clone
-        NodeGit.Clone(repoURL, repoPath, cloneOpts)
+        NodeGit.Clone repoURL, repoPath, cloneOpts
         .then (repository) ->
           callback repository
           return
       else
         # Pull
         repo = {}
-        NodeGit.Repository.open(repoPath)
+        NodeGit.Repository.open repoPath
         .then (repository) ->
           repo = repository
           repo.fetchAll cloneOpts.fetchOpts
