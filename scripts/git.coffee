@@ -57,8 +57,9 @@ module.exports =
       tree = treeObj
       repo.getHeadCommit()
     .then (parent) ->
-      sig = repo.defaultSignature()
-      repo.createCommit 'HEAD', sig, sig, message, tree, [parent]
+      author = repo.defaultSignature()
+      committer = Git.Signature.create 'RooBot', 'website@gpa-centex.org'
+      repo.createCommit 'HEAD', author, committer, message, tree, [parent]
     .then (oid) ->
       callback oid
 
