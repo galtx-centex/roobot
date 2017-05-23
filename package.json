@@ -5,6 +5,7 @@
   "author": "Zach Whaley <zachbwhaley@gmail.com>",
   "description": "A simple helpful robot",
   "dependencies": {
+    "github-api": "^3.0.0",
     "hubot": "^2.19.0",
     "hubot-diagnostics": "0.0.1",
     "hubot-google-images": "^0.2.6",
@@ -17,7 +18,8 @@
     "hubot-rules": "^0.1.1",
     "hubot-scripts": "^2.17.2",
     "hubot-shipit": "^0.2.0",
-    "hubot-slack": "^4.3.4"
+    "hubot-slack": "^4.3.4",
+    "nodegit": "^0.18.3"
   },
   "engines": {
     "node": "0.10.x"

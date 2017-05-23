@@ -2,8 +2,10 @@
 fs = require 'fs'
 path = require 'path'
 Git = require 'nodegit'
+GitHub = require 'github-api'
 
-repoURL = 'git@github.com:gpa-centex/gpa-centex.github.io.git'
+repoName = 'gpa-centex/gpa-centex.github.io'
+repoURL = "git@github.com:#{repoName}.git"
 repoPath = path.join __dirname, 'website'
 
 ssh = (url, username) ->
@@ -16,9 +18,8 @@ module.exports =
       if err
         # Clone
         Git.Clone repoURL, repoPath, cloneOpts
-        .done (repository) ->
+        .then (repository) ->
           callback repository
-          return
       else
         # Pull
         repo = {}
@@ -30,7 +31,6 @@ module.exports =
           repo.mergeBranches 'master', 'origin/master'
         .done ->
           callback repo
-          return
 
   branch: (repo, name, callback) ->
     ref = {}
@@ -42,7 +42,6 @@ module.exports =
       repo.checkoutBranch ref, {}
     .done ->
       callback ref
-      return
 
   commit: (repo, message, callback) ->
     ndx = {}
@@ -60,15 +59,20 @@ module.exports =
     .then (parent) ->
       sig = repo.defaultSignature()
       repo.createCommit 'HEAD', sig, sig, message, tree, [parent]
-    .done (oid) ->
+    .then (oid) ->
       callback oid
-      return
 
   push: (repo, ref, callback) ->
-    repo.getRemote 'origin'
+    repo.getRemote 'zach'
     .then (remote) ->
       pushOpts = callbacks: credentials: ssh
       remote.push ["#{ref}:#{ref}"], pushOpts
     .done ->
       callback()
-      return
+
+  pullrequest: (title, head, callback) ->
+    github = new GitHub {token: process.env.GITHUB_TOKEN}
+    repo = github.getRepo repoName
+    repo.createPullRequest {title: title, head: head, base: 'master'}
+    .then (res) ->
+      callback res.data
