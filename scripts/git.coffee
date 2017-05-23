@@ -63,7 +63,7 @@ module.exports =
       callback oid
 
   push: (repo, ref, callback) ->
-    repo.getRemote 'zach'
+    repo.getRemote 'origin'
     .then (remote) ->
       pushOpts = callbacks: credentials: ssh
       remote.push ["#{ref}:#{ref}"], pushOpts
