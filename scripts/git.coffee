@@ -5,15 +5,15 @@ Git = require 'nodegit'
 GitHub = require 'github-api'
 
 repoName = 'gpa-centex/gpa-centex.github.io'
-repoURL = "git@github.com:#{repoName}.git"
-repoPath = path.join __dirname, 'website'
+repoURL = "https://github.com/#{repoName}.git"
+repoPath = path.join __dirname, 'gpa-centex.org'
 
-ssh = (url, username) ->
-  Git.Cred.sshKeyFromAgent username
+auth = (url, username) ->
+  Git.Cred.userpassPlaintextNew process.env.GITHUB_TOKEN, 'x-oauth-basic'
 
 module.exports =
   pull: (callback) ->
-    cloneOpts = fetchOpts: callbacks: credentials: ssh
+    cloneOpts = fetchOpts: callbacks: credentials: auth
     fs.stat repoPath, (err, stats) ->
       if err
         # Clone
@@ -66,7 +66,7 @@ module.exports =
   push: (repo, ref, callback) ->
     repo.getRemote 'origin'
     .then (remote) ->
-      pushOpts = callbacks: credentials: ssh
+      pushOpts = callbacks: credentials: auth
       remote.push ["#{ref}:#{ref}"], pushOpts
     .done ->
       callback()
