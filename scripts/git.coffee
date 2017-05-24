@@ -17,7 +17,7 @@ module.exports =
     fs.stat repoPath, (err, stats) ->
       if err
         # Clone
-        Git.Clone repoURL, repoPath, cloneOpts
+        Git.Clone.clone repoURL, repoPath, cloneOpts
         .then (repository) ->
           callback repository
       else
@@ -43,7 +43,7 @@ module.exports =
     .done ->
       callback ref
 
-  commit: (repo, message, callback) ->
+  commit: (repo, user, message, callback) ->
     ndx = {}
     tree = {}
     repo.refreshIndex()
@@ -57,8 +57,8 @@ module.exports =
       tree = treeObj
       repo.getHeadCommit()
     .then (parent) ->
-      author = repo.defaultSignature()
-      committer = Git.Signature.create 'RooBot', 'website@gpa-centex.org'
+      author = Git.Signature.now user.name, user.email
+      committer = Git.Signature.now 'roobot', 'website@gpa-centex.org'
       repo.createCommit 'HEAD', author, committer, message, tree, [parent]
     .then (oid) ->
       callback oid
