@@ -58,7 +58,7 @@ module.exports =
       repo.getHeadCommit()
     .then (parent) ->
       author = Git.Signature.now user.name, user.email
-      committer = Git.Signature.now 'roobot', 'website@gpa-centex.org'
+      committer = Git.Signature.now 'RooBot', 'roobot@gpa-centex.org'
       repo.createCommit 'HEAD', author, committer, message, tree, [parent]
     .then (oid) ->
       callback oid
