@@ -6,7 +6,8 @@ adopt = (repo, greyhound, callback) ->
   fs.readFile file, 'utf8', (err, data) ->
     return callback err if err
 
-    if data.search ///#{greyhound}:///g is -1
+    m = data.match ///^#{greyhound}:$///m
+    if m is null
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     err = null
