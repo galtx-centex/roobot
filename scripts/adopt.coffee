@@ -6,7 +6,7 @@ adopt = (repo, greyhound, callback) ->
   fs.readFile file, 'utf8', (err, data) ->
     return callback err if err
 
-    if data.search ///^#{greyhound}:/// is -1
+    if data.search ///#{greyhound}:///g is -1
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     err = null
@@ -31,7 +31,7 @@ module.exports = (robot) ->
       name: res.message.user.real_name,
       email: res.message.user.profile.email
 
-    res.reply "Moving #{greyhound} to Happy Tails 💗\nHang on a sec..."
+    res.reply "Moving #{greyhound} to Happy Tails! 💗\nHang on a sec..."
     git.pull (repo) ->
       adopt repo, greyhound, (err) ->
         return res.reply err if err
