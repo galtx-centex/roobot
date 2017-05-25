@@ -1,6 +1,6 @@
 {
   "name": "roobot",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "author": "Zach Whaley <zachbwhaley@gmail.com>",
   "description": "A simple helpful robot",
@@ -21,8 +21,5 @@
     "hubot-shipit": "^0.2.0",
     "hubot-slack": "^4.3.4",
     "nodegit": "^0.18.3"
-  },
-  "engines": {
-    "node": "0.10.x"
   }
 }
