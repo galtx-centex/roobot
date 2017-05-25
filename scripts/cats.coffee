@@ -4,6 +4,7 @@
 # Dependencies:
 #   "github-api": "3.0.0"
 #   "nodegit": "0.18.3"
+#   "capitalize": "1.0.0"
 #
 # Commands:
 #   hubot cats <yes|no> <greyhound> - Label a greyhound as cat safe or not

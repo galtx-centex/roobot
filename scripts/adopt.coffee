@@ -4,6 +4,7 @@
 # Dependencies:
 #   "github-api": "3.0.0"
 #   "nodegit": "0.18.3"
+#   "capitalize": "1.0.0"
 #
 # Commands:
 #   hubot adopt <greyhound> - Moves an adopted greyhound to the Happy Tails page
