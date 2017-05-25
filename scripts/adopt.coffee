@@ -1,3 +1,16 @@
+# Description:
+#   Move an adopted greyhound to the Happy Tails page
+#
+# Dependencies:
+#   "github-api": "3.0.0"
+#   "nodegit": "0.18.3"
+#
+# Commands:
+#   hubot adopt <greyhound> - Moves an adopted greyhound to the Happy Tails page
+#
+# Author:
+#   Zach Whaley (zachwhaley) <zachbwhaley@gmail.com>
+
 fs = require 'fs'
 git = require './git'
 
