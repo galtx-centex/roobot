@@ -12,6 +12,8 @@
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail.com>
 
 fs = require 'fs'
+capitalize = require 'capitalize'
+
 git = require './git'
 
 adopt = (repo, greyhound, callback) ->
@@ -27,7 +29,7 @@ adopt = (repo, greyhound, callback) ->
     data = data.replace(
       ///^(#{greyhound}:[\s\S]+?)available:\s(yes|no)///m, (match, p1, p2) ->
         if p2 is 'no'
-          err = "#{greyhound} has already been adopted 😝"
+          err = "#{capitalize(greyhound)} has already been adopted 😝"
           return
         "#{p1}available: no"
     )
@@ -39,17 +41,18 @@ adopt = (repo, greyhound, callback) ->
 module.exports = (robot) ->
   robot.respond /adopt (.*)/i, (res) ->
     greyhound = res.match[1]
-    message = "#{greyhound} Adopted!"
+    message = "#{capitalize(greyhound)} Adopted! 💗"
     branch = "adopt-#{greyhound}"
     user =
       name: res.message.user.real_name,
       email: res.message.user.profile.email
 
-    res.reply "Moving #{greyhound} to Happy Tails! 💗\nHang on a sec..."
+    res.reply "Moving #{capitalize(greyhound)} to Happy Tails! 💗\n" +
+              "Hang on a sec..."
     git.pull (repo) ->
-      adopt repo, greyhound, (err) ->
-        return res.reply err if err
-        git.branch repo, branch, (ref) ->
+      git.branch repo, branch, (ref) ->
+        adopt repo, greyhound, (err) ->
+          return res.reply err if err
           git.commit repo, user, message, (oid) ->
             git.push repo, ref, ->
               git.pullrequest message, branch, (pr) ->
