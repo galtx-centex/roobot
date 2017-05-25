@@ -5,6 +5,7 @@
   "author": "Zach Whaley <zachbwhaley@gmail.com>",
   "description": "A simple helpful robot",
   "dependencies": {
+    "coffeescript": "^1.12.6",
     "github-api": "^3.0.0",
     "hubot": "^2.19.0",
     "hubot-diagnostics": "0.0.1",
