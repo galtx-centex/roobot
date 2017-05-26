@@ -16,7 +16,7 @@ capitalize = require 'capitalize'
 git = require './git'
 
 pending = (greyhound, callback) ->
-  git.load_greyhounds (greyhounds) ->
+  git.loadGreyhounds (greyhounds) ->
     if greyhound not of greyhounds
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -27,7 +27,7 @@ pending = (greyhound, callback) ->
       return callback "#{capitalize(greyhound)} is already pending adoption 😝"
 
     greyhounds[greyhound].pending = yes
-    git.dump_greyhounds greyhounds, callback
+    git.dumpGreyhounds greyhounds, callback
 
 module.exports = (robot) ->
   robot.respond /pending (.*)/i, (res) ->

@@ -17,7 +17,7 @@ capitalize = require 'capitalize'
 git = require './git'
 
 adopt = (greyhound, callback) ->
-  git.load_greyhounds (greyhounds) ->
+  git.loadGreyhounds (greyhounds) ->
     if greyhound not of greyhounds
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -25,7 +25,7 @@ adopt = (greyhound, callback) ->
       return callback "#{capitalize(greyhound)} has already been adopted 😝"
 
     greyhounds[greyhound].available = no
-    git.dump_greyhounds greyhounds, callback
+    git.dumpGreyhounds greyhounds, callback
 
 module.exports = (robot) ->
   robot.respond /adopt (.*)/i, (res) ->

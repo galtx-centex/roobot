@@ -20,12 +20,12 @@ objEncoder = (value) ->
     null
 
 module.exports =
-  load_greyhounds: (callback) ->
+  loadGreyhounds: (callback) ->
     file = "#{repoPath}/_data/greyhounds.yml"
     yaml.load file, (greyhounds) ->
       callback greyhounds
 
-  dump_greyhounds: (greyhounds, callback) ->
+  dumpGreyhounds: (greyhounds, callback) ->
     file = "#{repoPath}/_data/greyhounds.yml"
     data = yaml.dump greyhounds, 2, 2, false, objEncoder
     fs.writeFile file, data, (err) ->

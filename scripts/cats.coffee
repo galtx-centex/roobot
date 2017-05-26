@@ -17,12 +17,12 @@ capitalize = require 'capitalize'
 git = require './git'
 
 cats = (greyhound, catsafe, callback) ->
-  git.load_greyhounds (greyhounds) ->
+  git.loadGreyhounds (greyhounds) ->
     if greyhound not of greyhounds
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     greyhounds[greyhound].cats = catsafe
-    git.dump_greyhounds greyhounds, callback
+    git.dumpGreyhounds greyhounds, callback
 
 module.exports = (robot) ->
   robot.respond /cats (\w+) (\w+)/i, (res) ->
