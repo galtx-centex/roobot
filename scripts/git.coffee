@@ -48,6 +48,8 @@ module.exports =
           repo.fetchAll cloneOpts.fetchOpts
         .then ->
           repo.mergeBranches 'master', 'origin/master'
+        .then ->
+          repo.checkoutBranch 'master'
         .done ->
           callback repo
 
