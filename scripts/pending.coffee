@@ -1,11 +1,6 @@
 # Description:
 #   Label a greyhound as pending adoption
 #
-# Dependencies:
-#   "github-api": "3.0.0"
-#   "nodegit": "0.18.3"
-#   "capitalize": "1.0.0"
-#
 # Commands:
 #   hubot pending <greyhound> - Labels a greyhound as pending adoption
 #
