@@ -12,30 +12,17 @@
 # Author:
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail.com>
 
-fs = require 'fs'
 capitalize = require 'capitalize'
 
 git = require './git'
 
-cats = (repo, greyhound, safe, callback) ->
-  file = "#{repo.workdir()}/_data/greyhounds.yml"
-  fs.readFile file, 'utf8', (err, data) ->
-    return callback err if err
+cats = (greyhound, catsafe, callback) ->
+  git.load_greyhounds (greyhounds) ->
+    if greyhound not of greyhounds
+      return callback "Sorry, couldn't find #{greyhound} 😕"
 
-    m = data.match ///^#{greyhound}:$///m
-    if m is null
-      return callback "Sorry, couldn't find #{capitalize(greyhound)} 😕"
-
-    data = data.replace(
-      ///^(#{greyhound}:[\s\S]+?)cats:.*///m, (match, p1) ->
-        if safe
-          "#{p1}cats: yes"
-        else
-          "#{p1}cats: no"
-    )
-
-    fs.writeFile file, data, (err) ->
-      callback err
+    greyhounds[greyhound].cats = catsafe
+    git.dump_greyhounds greyhounds, callback
 
 module.exports = (robot) ->
   robot.respond /cats (\w+) (\w+)/i, (res) ->
@@ -43,9 +30,9 @@ module.exports = (robot) ->
     greyhound = res.match[2]
 
     if catsafe is 'yes'
-      catsafe = true
+      catsafe = yes
     else if catsafe is 'no'
-      catsafe = false
+      catsafe = no
     else
       res.reply "I'm not sure what 'cats #{catsafe} #{greyhound}' means 😕\n" +
                 "Please use 'cats yes #{greyhound}' or 'cats no #{greyhound}'"
@@ -62,7 +49,7 @@ module.exports = (robot) ->
               "Hang on a sec..."
     git.pull (repo) ->
       git.branch repo, branch, (ref) ->
-        cats repo, greyhound, catsafe, (err) ->
+        cats greyhound, catsafe, (err) ->
           return res.reply err if err
           git.commit repo, user, message, (oid) ->
             git.push repo, ref, ->
