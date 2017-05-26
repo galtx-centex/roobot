@@ -7,6 +7,7 @@
   "dependencies": {
     "capitalize": "^1.0.0",
     "coffeescript": "^1.12.6",
+    "dateformat": "^2.0.0",
     "github-api": "^3.0.0",
     "hubot": "^2.19.0",
     "hubot-diagnostics": "0.0.1",
@@ -16,6 +17,7 @@
     "hubot-rules": "^0.1.1",
     "hubot-scripts": "^2.17.2",
     "hubot-slack": "^4.3.4",
-    "nodegit": "^0.18.3"
+    "nodegit": "^0.18.3",
+    "yamljs": "github:zachwhaley/yaml.js#release"
   }
 }

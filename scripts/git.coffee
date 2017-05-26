@@ -1,6 +1,8 @@
 # Git commands
 fs = require 'fs'
+yaml = require 'yamljs'
 path = require 'path'
+dateformat = require 'dateformat'
 Git = require 'nodegit'
 GitHub = require 'github-api'
 
@@ -11,7 +13,24 @@ repoPath = path.join __dirname, 'gpa-centex.org'
 auth = (url, username) ->
   Git.Cred.userpassPlaintextNew process.env.GITHUB_TOKEN, 'x-oauth-basic'
 
+objEncoder = (value) ->
+  if value instanceof Date
+    dateformat value, 'isoDate', true
+  else
+    null
+
 module.exports =
+  load_greyhounds: (callback) ->
+    file = "#{repoPath}/_data/greyhounds.yml"
+    yaml.load file, (greyhounds) ->
+      callback greyhounds
+
+  dump_greyhounds: (greyhounds, callback) ->
+    file = "#{repoPath}/_data/greyhounds.yml"
+    data = yaml.dump greyhounds, 2, 2, false, objEncoder
+    fs.writeFile file, data, (err) ->
+      callback err
+
   pull: (callback) ->
     cloneOpts = fetchOpts: callbacks: credentials: auth
     fs.stat repoPath, (err, stats) ->
