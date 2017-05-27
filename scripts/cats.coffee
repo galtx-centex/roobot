@@ -39,8 +39,8 @@ module.exports = (robot) ->
     message = "#{capitalize(greyhound)} is #{toString(catsafe)}"
     branch = "cats-#{greyhound}"
     user =
-      name: res.message.user.real_name,
-      email: res.message.user.profile.email
+      name: res.message.user?.real_name?,
+      email: res.message.user?.profile?.email?
 
     res.reply "Labeling #{capitalize(greyhound)} as #{catmsg}\n" +
               "Hang on a sec..."

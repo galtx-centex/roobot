@@ -30,8 +30,8 @@ module.exports = (robot) ->
     message = "#{capitalize(greyhound)} Pending Adoption! 🎉"
     branch = "pending-#{greyhound}"
     user =
-      name: res.message.user.real_name,
-      email: res.message.user.profile.email
+      name: res.message.user?.real_name?,
+      email: res.message.user?.profile?.email?
 
     res.reply "Labeling #{capitalize(greyhound)} as Pending Adoption! 🎉\n" +
               "Hang on a sec..."
