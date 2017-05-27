@@ -30,19 +30,19 @@ module.exports = (robot) ->
     catsafe = res.match[1]
     greyhound = res.match[2]
 
-    if catsafe isnt 'yes' or isnt 'no'
+    if catsafe not in ['yes', 'no']
       res.reply "I'm not sure what 'cats #{catsafe} #{greyhound}' means 😕\n" +
                 "Please use 'cats yes #{greyhound}' or 'cats no #{greyhound}'"
       return
-
     catsafe = catsafe is 'yes'
+
     message = "#{capitalize(greyhound)} is #{toString(catsafe)}"
     branch = "cats-#{greyhound}"
     user =
       name: res.message.user?.real_name?,
       email: res.message.user?.profile?.email?
 
-    res.reply "Labeling #{capitalize(greyhound)} as #{catmsg}\n" +
+    res.reply "Labeling #{capitalize(greyhound)} as #{toString(catsafe)}\n" +
               "Hang on a sec..."
     git.pull (repo) ->
       git.branch repo, branch, (ref) ->
