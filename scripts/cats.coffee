@@ -11,7 +11,7 @@ capitalize = require 'capitalize'
 
 git = require './git'
 
-toString = (catsafe) ->
+catString = (catsafe) ->
   return if catsafe then "cat safe! 😸" else "not cat safe 😿"
 
 cats = (greyhound, catsafe, callback) ->
@@ -20,7 +20,7 @@ cats = (greyhound, catsafe, callback) ->
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if greyhounds[greyhound].cats is catsafe
-      return callback "#{capitalize(greyhound)} is already #{toString(catsafe)} 😝"
+      return callback "#{capitalize(greyhound)} is already #{catString(catsafe)} 😝"
 
     greyhounds[greyhound].cats = catsafe
     git.dumpGreyhounds greyhounds, callback
@@ -36,13 +36,13 @@ module.exports = (robot) ->
       return
     catsafe = catsafe is 'yes'
 
-    message = "#{capitalize(greyhound)} is #{toString(catsafe)}"
+    message = "#{capitalize(greyhound)} is #{catString(catsafe)}"
     branch = "cats-#{greyhound}"
     user =
       name: res.message.user?.real_name,
       email: res.message.user?.profile?.email
 
-    res.reply "Labeling #{capitalize(greyhound)} as #{toString(catsafe)}\n" +
+    res.reply "Labeling #{capitalize(greyhound)} as #{catString(catsafe)}\n" +
               "Hang on a sec..."
     git.pull (err, repo) ->
       return res.reply err if err?
