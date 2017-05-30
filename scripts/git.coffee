@@ -38,10 +38,12 @@ module.exports =
         # Clone
         Git.Clone.clone repoURL, repoPath, cloneOpts
         .then (repository) ->
-          callback repository
+          callback null, repository
+        .catch (err) ->
+          callback "Clone #{err}", null
       else
         # Pull
-        repo = {}
+        repo = null
         Git.Repository.open repoPath
         .then (repository) ->
           repo = repository
@@ -50,23 +52,32 @@ module.exports =
           repo.mergeBranches 'master', 'origin/master'
         .then ->
           repo.checkoutBranch 'master'
-        .done ->
-          callback repo
+        .then ->
+          callback null, repo
+        .catch (err) ->
+          callback "Pull #{err}", repo
 
   branch: (repo, name, callback) ->
-    ref = {}
+    ref = null
+    master = null
     repo.getMasterCommit()
-    .then (master) ->
+    .then (oid) ->
+      master = oid
+      Git.Reset.reset repo, master, Git.Reset.TYPE.HARD
+    .then (err) ->
+      throw "Failed hard reset" if err > 0
       repo.createBranch name, master, true
     .then (reference) ->
       ref = reference
-      repo.checkoutBranch ref, {}
-    .done ->
-      callback ref
+      repo.checkoutBranch ref
+    .then ->
+      callback null, ref
+    .catch (err) ->
+      callback "Branch #{err}", ref
 
   commit: (repo, user, message, callback) ->
-    ndx = {}
-    tree = {}
+    ndx = null
+    tree = null
     repo.refreshIndex()
     .then (index) ->
       ndx = index
@@ -82,19 +93,25 @@ module.exports =
       committer = Git.Signature.now 'RooBot', 'roobot@gpa-centex.org'
       repo.createCommit 'HEAD', author, committer, message, tree, [parent]
     .then (oid) ->
-      callback oid
+      callback null, oid
+    .catch (err) ->
+      callback "Commit #{err}"
 
   push: (repo, ref, callback) ->
     repo.getRemote 'origin'
     .then (remote) ->
       pushOpts = callbacks: credentials: auth
       remote.push ["#{ref}:#{ref}"], pushOpts
-    .done ->
-      callback()
+    .then ->
+      callback null
+    .catch (err) ->
+      callback "Push #{err}"
 
   pullrequest: (title, head, callback) ->
     github = new GitHub {token: process.env.GITHUB_TOKEN}
     repo = github.getRepo repoName
     repo.createPullRequest {title: title, head: head, base: 'master'}
     .then (res) ->
-      callback res.data
+      callback null, res.data
+    .catch (err) ->
+      callback "PR #{err}"

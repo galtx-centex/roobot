@@ -44,11 +44,16 @@ module.exports = (robot) ->
 
     res.reply "Labeling #{capitalize(greyhound)} as #{toString(catsafe)}\n" +
               "Hang on a sec..."
-    git.pull (repo) ->
-      git.branch repo, branch, (ref) ->
+    git.pull (err, repo) ->
+      return res.reply err if err?
+      git.branch repo, branch, (err, ref) ->
+        return res.reply err if err?
         cats greyhound, catsafe, (err) ->
-          return res.reply err if err
-          git.commit repo, user, message, (oid) ->
-            git.push repo, ref, ->
-              git.pullrequest message, branch, (pr) ->
+          return res.reply err if err?
+          git.commit repo, user, message, (err, oid) ->
+            return res.reply err if err?
+            git.push repo, ref, (err) ->
+              return res.reply err if err?
+              git.pullrequest message, branch, (err, pr) ->
+                return res.reply err if err?
                 res.reply "Pull Request ready ➜ #{pr.html_url}"
