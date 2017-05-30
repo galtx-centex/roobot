@@ -20,7 +20,7 @@ cats = (greyhound, catsafe, callback) ->
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if greyhounds[greyhound].cats is catsafe
-      return callback "#{capitalize(greyhound)} is already #{toString(catsafe)}"
+      return callback "#{capitalize(greyhound)} is already #{toString(catsafe)} 😝"
 
     greyhounds[greyhound].cats = catsafe
     git.dumpGreyhounds greyhounds, callback
