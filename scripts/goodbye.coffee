@@ -25,7 +25,7 @@ goodbye = (greyhound, dod, callback) ->
 
 module.exports = (robot) ->
   robot.respond /goodbye (\w+)\s?(\d\d\d\d-\d{1,2}-\d{1,2})?/i, (res) ->
-    greyhound = res.match[1]
+    greyhound = res.match[1]?.toLowerCase()
     dod = res.match[2]
     message = "#{capitalize(greyhound)} crossed the Rainbow Bridge 😢"
     branch = "goodbye-#{greyhound}"

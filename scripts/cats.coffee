@@ -27,8 +27,8 @@ cats = (greyhound, catsafe, callback) ->
 
 module.exports = (robot) ->
   robot.respond /cats (\w+) (\w+)/i, (res) ->
-    catsafe = res.match[1]
-    greyhound = res.match[2]
+    catsafe = res.match[1]?.toLowerCase()
+    greyhound = res.match[2]?.toLowerCase()
 
     if catsafe not in ['yes', 'no']
       res.reply "I'm not sure what 'cats #{catsafe} #{greyhound}' means 😕\n" +

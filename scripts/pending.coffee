@@ -26,7 +26,7 @@ pending = (greyhound, callback) ->
 
 module.exports = (robot) ->
   robot.respond /pending (.*)/i, (res) ->
-    greyhound = res.match[1]
+    greyhound = res.match[1]?.toLowerCase()
     message = "#{capitalize(greyhound)} Pending Adoption! 🎉"
     branch = "pending-#{greyhound}"
     user =

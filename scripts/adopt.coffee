@@ -24,7 +24,7 @@ adopt = (greyhound, callback) ->
 
 module.exports = (robot) ->
   robot.respond /adopt (.*)/i, (res) ->
-    greyhound = res.match[1]
+    greyhound = res.match[1]?.toLowerCase()
     message = "#{capitalize(greyhound)} Adopted! 💗"
     branch = "adopt-#{greyhound}"
     user =
