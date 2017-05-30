@@ -30,8 +30,8 @@ module.exports = (robot) ->
     message = "#{capitalize(greyhound)} crossed the Rainbow Bridge 😢"
     branch = "goodbye-#{greyhound}"
     user =
-      name: res.message.user?.real_name?,
-      email: res.message.user?.profile?.email?
+      name: res.message.user?.real_name,
+      email: res.message.user?.profile?.email
 
     res.reply "Moving #{capitalize(greyhound)} to the Rainbow Bridge 😢\n" +
               "Hang on a sec..."
