@@ -18,6 +18,7 @@
     "hubot-scripts": "^2.17.2",
     "hubot-slack": "^4.3.4",
     "nodegit": "^0.18.3",
-    "yamljs": "github:zachwhaley/yaml.js#release"
+    "yamljs": "github:gpa-centex/yaml.js#release",
+    "gray-matter": "github:zachwhaley/gray-matter"
   }
 }
