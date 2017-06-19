@@ -15,15 +15,15 @@ catString = (catsafe) ->
   return if catsafe then "cat safe! 😸" else "not cat safe 😿"
 
 cats = (greyhound, catsafe, callback) ->
-  git.loadGreyhounds (greyhounds) ->
-    if greyhound not of greyhounds
+  git.loadGreyhound greyhound, (info, bio) ->
+    if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
-    if greyhounds[greyhound].cats is catsafe
+    if info.cats is catsafe
       return callback "#{capitalize(greyhound)} is already #{catString(catsafe)} 😝"
 
-    greyhounds[greyhound].cats = catsafe
-    git.dumpGreyhounds greyhounds, callback
+    info.cats = catsafe
+    git.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /cats (\w+) (\w+)/i, (res) ->

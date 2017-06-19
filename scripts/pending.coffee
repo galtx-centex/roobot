@@ -11,18 +11,18 @@ capitalize = require 'capitalize'
 git = require './git'
 
 pending = (greyhound, callback) ->
-  git.loadGreyhounds (greyhounds) ->
-    if greyhound not of greyhounds
+  git.loadGreyhound greyhound, (info, bio) ->
+    if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
-    if greyhounds[greyhound].available is no
+    if info.available is no
       return callback "#{capitalize(greyhound)} has already been adopted 😝"
 
-    if greyhounds[greyhound].pending is yes
+    if info.pending is yes
       return callback "#{capitalize(greyhound)} is already pending adoption 😝"
 
-    greyhounds[greyhound].pending = yes
-    git.dumpGreyhounds greyhounds, callback
+    info.pending = yes
+    git.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /pending (.*)/i, (res) ->

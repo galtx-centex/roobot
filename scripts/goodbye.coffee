@@ -12,16 +12,16 @@ capitalize = require 'capitalize'
 git = require './git'
 
 goodbye = (greyhound, dod, callback) ->
-  git.loadGreyhounds (greyhounds) ->
-    if greyhound not of greyhounds
+  git.loadGreyhound greyhound, (info, bio) ->
+    if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
-    if greyhounds[greyhound].deceased is yes
+    if info.deceased is yes
       return callback "#{capitalize(greyhound)} has already crossed the Rainbow Bridge 😢"
 
-    greyhounds[greyhound].deceased = yes
-    greyhounds[greyhound].dod = new Date(dod) if dod?
-    git.dumpGreyhounds greyhounds, callback
+    info.deceased = yes
+    info.dod = new Date(dod) if dod?
+    git.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /goodbye (\w+)\s?(\d\d\d\d-\d{1,2}-\d{1,2})?/i, (res) ->
