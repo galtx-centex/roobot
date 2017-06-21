@@ -16,10 +16,12 @@ adopt = (greyhound, callback) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
-    if info.available is no
+    if info.category is 'deceased'
+      return callback "#{capitalize(greyhound)} has crossed the Rainbow Bridge 😢"
+    if info.category is 'adopted'
       return callback "#{capitalize(greyhound)} has already been adopted 😝"
 
-    info.available = no
+    info.category = 'adopted'
     git.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->

@@ -15,9 +15,10 @@ pending = (greyhound, callback) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
-    if info.available is no
+    if info.category is 'deceased'
+      return callback "#{capitalize(greyhound)} has crossed the Rainbow Bridge 😢"
+    if info.category is 'adopted'
       return callback "#{capitalize(greyhound)} has already been adopted 😝"
-
     if info.pending is yes
       return callback "#{capitalize(greyhound)} is already pending adoption 😝"
 

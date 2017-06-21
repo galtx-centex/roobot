@@ -16,10 +16,10 @@ goodbye = (greyhound, dod, callback) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
-    if info.deceased is yes
+    if info.category is 'deceased'
       return callback "#{capitalize(greyhound)} has already crossed the Rainbow Bridge 😢"
 
-    info.deceased = yes
+    info.category = 'deceased'
     info.dod = new Date(dod) if dod?
     git.dumpGreyhound greyhound, info, bio, callback
 
