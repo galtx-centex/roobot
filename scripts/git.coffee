@@ -46,9 +46,9 @@ module.exports =
           repo = repository
           repo.fetchAll cloneOpts.fetchOpts
         .then ->
-          repo.mergeBranches 'master', 'origin/master'
+          repo.mergeBranches 'source', 'origin/source'
         .then ->
-          repo.checkoutBranch 'master'
+          repo.checkoutBranch 'source'
         .then ->
           callback null, repo
         .catch (err) ->
@@ -56,14 +56,14 @@ module.exports =
 
   branch: (repo, name, callback) ->
     ref = null
-    master = null
-    repo.getMasterCommit()
+    head = null
+    repo.getHeadCommit()
     .then (oid) ->
-      master = oid
-      Git.Reset.reset repo, master, Git.Reset.TYPE.HARD
+      head = oid
+      Git.Reset.reset repo, head, Git.Reset.TYPE.HARD
     .then (err) ->
       throw "Failed hard reset" if err > 0
-      repo.createBranch name, master, true
+      repo.createBranch name, head, true
     .then (reference) ->
       ref = reference
       repo.checkoutBranch ref
@@ -107,7 +107,7 @@ module.exports =
   pullrequest: (title, head, callback) ->
     github = new GitHub {token: process.env.GITHUB_TOKEN}
     repo = github.getRepo repoName
-    repo.createPullRequest {title: title, head: head, base: 'master'}
+    repo.createPullRequest {title: title, head: head, base: 'source'}
     .then (res) ->
       callback null, res.data
     .catch (err) ->
