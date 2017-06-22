@@ -8,10 +8,12 @@
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail.com>
 
 capitalize = require 'capitalize'
-git = require './git'
+
+git = require '../lib/git'
+site = require '../lib/site'
 
 pending = (greyhound, callback) ->
-  git.loadGreyhound greyhound, (info, bio) ->
+  site.loadGreyhound greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -23,7 +25,7 @@ pending = (greyhound, callback) ->
       return callback "#{capitalize(greyhound)} is already pending adoption 😝"
 
     info.pending = yes
-    git.dumpGreyhound greyhound, info, bio, callback
+    site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /pending (.*)/i, (res) ->

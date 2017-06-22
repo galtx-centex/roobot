@@ -9,10 +9,11 @@
 
 capitalize = require 'capitalize'
 
-git = require './git'
+git = require '../lib/git'
+site = require '../lib/site'
 
 goodbye = (greyhound, dod, callback) ->
-  git.loadGreyhound greyhound, (info, bio) ->
+  site.loadGreyhound greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -21,7 +22,7 @@ goodbye = (greyhound, dod, callback) ->
 
     info.category = 'deceased'
     info.dod = new Date(dod) if dod?
-    git.dumpGreyhound greyhound, info, bio, callback
+    site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /goodbye (\w+)\s?(\d\d\d\d-\d{1,2}-\d{1,2})?/i, (res) ->

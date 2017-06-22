@@ -9,13 +9,14 @@
 
 capitalize = require 'capitalize'
 
-git = require './git'
+git = require '../lib/git'
+site = require '../lib/site'
 
 catString = (catsafe) ->
   return if catsafe then "cat safe! 😸" else "not cat safe 😿"
 
 cats = (greyhound, catsafe, callback) ->
-  git.loadGreyhound greyhound, (info, bio) ->
+  site.loadGreyhound greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -23,7 +24,7 @@ cats = (greyhound, catsafe, callback) ->
       return callback "#{capitalize(greyhound)} is already #{catString(catsafe)} 😝"
 
     info.cats = catsafe
-    git.dumpGreyhound greyhound, info, bio, callback
+    site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /cats (\w+) (\w+)/i, (res) ->

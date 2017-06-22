@@ -1,7 +1,6 @@
 # Git commands
+
 fs = require 'fs'
-yaml = require 'yamljs'
-matter = require 'gray-matter'
 path = require 'path'
 Git = require 'nodegit'
 GitHub = require 'github-api'
@@ -14,20 +13,6 @@ auth = (url, username) ->
   Git.Cred.userpassPlaintextNew process.env.GITHUB_TOKEN, 'x-oauth-basic'
 
 module.exports =
-  loadGreyhound: (greyhound, callback) ->
-    file = "#{repoPath}/_greyhounds/#{greyhound}.md"
-    fs.readFile file, 'utf8', (err, data) ->
-      if err
-        return callback null, null
-      info = matter data, parser: yaml.parse
-      callback info.data, info.content
-
-  dumpGreyhound: (greyhound, info, bio, callback) ->
-    file = "#{repoPath}/_greyhounds/#{greyhound}.md"
-    data = matter.stringify bio, info, dumper: yaml.dump
-    fs.writeFile file, data, (err) ->
-      callback err
-
   pull: (callback) ->
     cloneOpts = fetchOpts: callbacks: credentials: auth
     fs.stat repoPath, (err, stats) ->

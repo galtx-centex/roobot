@@ -9,10 +9,11 @@
 
 capitalize = require 'capitalize'
 
-git = require './git'
+git = require '../lib/git'
+site = require '../lib/site'
 
 adopt = (greyhound, callback) ->
-  git.loadGreyhound greyhound, (info, bio) ->
+  site.loadGreyhound greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -22,7 +23,7 @@ adopt = (greyhound, callback) ->
       return callback "#{capitalize(greyhound)} has already been adopted 😝"
 
     info.category = 'adopted'
-    git.dumpGreyhound greyhound, info, bio, callback
+    site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /adopt (.*)/i, (res) ->
