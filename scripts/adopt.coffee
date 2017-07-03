@@ -12,7 +12,7 @@ capitalize = require 'capitalize'
 git = require '../lib/git'
 site = require '../lib/site'
 
-adopt = (greyhound, callback) ->
+adopt = (greyhound, doa, callback) ->
   site.loadGreyhound greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
@@ -23,11 +23,13 @@ adopt = (greyhound, callback) ->
       return callback "#{capitalize(greyhound)} has already been adopted 😝"
 
     info.category = 'adopted'
+    info.doa = if doa? then new Date(doa) else new Date()
     site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
-  robot.respond /adopt (.*)/i, (res) ->
+  robot.respond /adopt (\w+)\s?(\d{4}-\d{1,2}-\d{1,2})?/i, (res) ->
     greyhound = res.match[1]?.toLowerCase()
+    doa = res.match[2]
     message = "#{capitalize(greyhound)} Adopted! 💗"
     branch = "adopt-#{greyhound}"
     user =
@@ -40,7 +42,7 @@ module.exports = (robot) ->
       return res.reply err if err?
       git.branch repo, branch, (err, ref) ->
         return res.reply err if err?
-        adopt greyhound, (err) ->
+        adopt greyhound, doa, (err) ->
           return res.reply err if err?
           git.commit repo, user, message, (err, oid) ->
             return res.reply err if err?
