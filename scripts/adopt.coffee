@@ -2,7 +2,7 @@
 #   Move an adopted greyhound to the Happy Tails page
 #
 # Commands:
-#   hubot adopt <greyhound> - Moves an adopted greyhound to the Happy Tails page
+#   hubot adopt <greyhound> [yyyy-mm-dd] - Moves an adopted greyhound to the Happy Tails page
 #
 # Author:
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail.com>
