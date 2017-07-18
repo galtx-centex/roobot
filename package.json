@@ -8,7 +8,7 @@
     "bluebird": "^3.5.0",
     "capitalize": "^1.0.0",
     "coffeelint": "^1.16.0",
-    "coffeescript": "^1.12.6",
+    "coffee-script": "^1.12.7",
     "dateformat": "^2.0.0",
     "github-api": "^3.0.0",
     "gray-matter": "github:zachwhaley/gray-matter",
@@ -21,6 +21,7 @@
     "hubot-scripts": "^2.17.2",
     "hubot-slack": "^4.3.4",
     "nodegit": "^0.18.3",
+    "request": "^2.81.0",
     "yamljs": "github:gpa-centex/yaml.js#release"
   },
   "scripts": {

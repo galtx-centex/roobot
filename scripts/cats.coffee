@@ -10,6 +10,7 @@
 capitalize = require 'capitalize'
 
 git = require '../lib/git'
+gms = require '../lib/gms'
 site = require '../lib/site'
 
 catString = (catsafe) ->
@@ -47,4 +48,7 @@ module.exports = (robot) ->
               "Hang on a sec..."
 
     git.update cats, greyhound, catsafe, gitOpts, (update) ->
+      res.reply update
+
+    gms.update 'CATSAFE', greyhound, catsafe, (update) ->
       res.reply update

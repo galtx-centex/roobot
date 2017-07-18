@@ -10,6 +10,7 @@
 capitalize = require 'capitalize'
 
 git = require '../lib/git'
+gms = require '../lib/gms'
 site = require '../lib/site'
 
 adopt = (greyhound, doa, callback) ->
@@ -45,4 +46,7 @@ module.exports = (robot) ->
               "Hang on a sec..."
 
     git.update adopt, greyhound, doa, gitOpts, (update) ->
+      res.reply update
+
+    gms.update 'ADOPT', greyhound, doa, (update) ->
       res.reply update
