@@ -30,31 +30,21 @@ module.exports = (robot) ->
   robot.respond /cats (\w+) (\w+)/i, (res) ->
     catsafe = res.match[1]?.toLowerCase()
     greyhound = res.match[2]?.toLowerCase()
-
     if catsafe not in ['yes', 'no']
       res.reply "I'm not sure what 'cats #{catsafe} #{greyhound}' means 😕\n" +
                 "Please use 'cats yes #{greyhound}' or 'cats no #{greyhound}'"
       return
     catsafe = catsafe is 'yes'
 
-    message = "#{capitalize(greyhound)} is #{catString(catsafe)}"
-    branch = "cats-#{greyhound}"
-    user =
-      name: res.message.user?.real_name,
-      email: res.message.user?.profile?.email
+    gitOpts =
+      message: "#{capitalize(greyhound)} is #{catString(catsafe)}"
+      branch: "cats-#{greyhound}"
+      user:
+        name: res.message.user?.real_name
+        email: res.message.user?.profile?.email
 
     res.reply "Labeling #{capitalize(greyhound)} as #{catString(catsafe)}\n" +
               "Hang on a sec..."
-    git.pull (err, repo) ->
-      return res.reply err if err?
-      git.branch repo, branch, (err, ref) ->
-        return res.reply err if err?
-        cats greyhound, catsafe, (err) ->
-          return res.reply err if err?
-          git.commit repo, user, message, (err, oid) ->
-            return res.reply err if err?
-            git.push repo, ref, (err) ->
-              return res.reply err if err?
-              git.pullrequest message, branch, (err, pr) ->
-                return res.reply err if err?
-                res.reply "Pull Request ready ➜ #{pr.html_url}"
+
+    git.update cats, greyhound, catsafe, gitOpts, (update) ->
+      res.reply update

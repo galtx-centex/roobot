@@ -28,24 +28,15 @@ module.exports = (robot) ->
   robot.respond /goodbye (\w+)\s?(\d{4}-\d{1,2}-\d{1,2})?/i, (res) ->
     greyhound = res.match[1]?.toLowerCase()
     dod = res.match[2]
-    message = "#{capitalize(greyhound)} crossed the Rainbow Bridge 😢"
-    branch = "goodbye-#{greyhound}"
-    user =
-      name: res.message.user?.real_name,
-      email: res.message.user?.profile?.email
+    gitOpts =
+      message: "#{capitalize(greyhound)} crossed the Rainbow Bridge 😢"
+      branch: "goodbye-#{greyhound}"
+      user:
+        name: res.message.user?.real_name
+        email: res.message.user?.profile?.email
 
     res.reply "Moving #{capitalize(greyhound)} to the Rainbow Bridge 😢\n" +
               "Hang on a sec..."
-    git.pull (err, repo) ->
-      return res.reply err if err?
-      git.branch repo, branch, (err, ref) ->
-        return res.reply err if err?
-        goodbye greyhound, dod, (err) ->
-          return res.reply err if err?
-          git.commit repo, user, message, (err, oid) ->
-            return res.reply err if err?
-            git.push repo, ref, (err) ->
-              return res.reply err if err?
-              git.pullrequest message, branch, (err, pr) ->
-                return res.reply err if err?
-                res.reply "Pull Request ready ➜ #{pr.html_url}"
+
+    git.update goodbye, greyhound, dod, gitOpts, (update) ->
+      res.reply update
