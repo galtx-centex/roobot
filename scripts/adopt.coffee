@@ -34,24 +34,15 @@ module.exports = (robot) ->
   robot.respond /adopt (\w+)\s?(\d{4}-\d{1,2}-\d{1,2})?/i, (res) ->
     greyhound = res.match[1]?.toLowerCase()
     doa = res.match[2]
-    message = "#{capitalize(greyhound)} Adopted! 💗"
-    branch = "adopt-#{greyhound}"
-    user =
-      name: res.message.user?.real_name,
-      email: res.message.user?.profile?.email
+    gitOpts =
+      message: "#{capitalize(greyhound)} Adopted! 💗"
+      branch: "adopt-#{greyhound}"
+      user:
+        name: res.message.user?.real_name
+        email: res.message.user?.profile?.email
 
     res.reply "Moving #{capitalize(greyhound)} to Happy Tails! 💗\n" +
               "Hang on a sec..."
-    git.pull (err, repo) ->
-      return res.reply err if err?
-      git.branch repo, branch, (err, ref) ->
-        return res.reply err if err?
-        adopt greyhound, doa, (err) ->
-          return res.reply err if err?
-          git.commit repo, user, message, (err, oid) ->
-            return res.reply err if err?
-            git.push repo, ref, (err) ->
-              return res.reply err if err?
-              git.pullrequest message, branch, (err, pr) ->
-                return res.reply err if err?
-                res.reply "Pull Request ready ➜ #{pr.html_url}"
+
+    git.update adopt, greyhound, doa, gitOpts, (update) ->
+      res.reply update
