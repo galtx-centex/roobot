@@ -23,7 +23,11 @@ adopt = (greyhound, doa, callback) ->
       return callback "#{capitalize(greyhound)} has already been adopted 😝"
 
     info.category = 'adopted'
-    info.doa = if doa? then new Date(doa) else new Date()
+    if doa?
+      info.doa = new Date doa
+    else
+      now = new Date()
+      info.doa = new Date Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
     site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
