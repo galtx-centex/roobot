@@ -49,7 +49,7 @@ branch = (repo, name) ->
       head = oid
       Git.Reset.reset repo, head, Git.Reset.TYPE.HARD
     .then (err) ->
-      throw "Failed hard reset" if err > 0
+      throw new Error "Failed hard reset" if err > 0
       repo.createBranch name, head, true
     .then (reference) ->
       ref = reference
