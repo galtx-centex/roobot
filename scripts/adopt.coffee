@@ -11,6 +11,7 @@ capitalize = require 'capitalize'
 
 git = require '../lib/git'
 site = require '../lib/site'
+util = require '../lib/util'
 
 adopt = (greyhound, doa, callback) ->
   site.loadGreyhound greyhound, (info, bio) ->
@@ -26,8 +27,7 @@ adopt = (greyhound, doa, callback) ->
     if doa?
       info.doa = new Date doa
     else
-      now = new Date()
-      info.doa = new Date Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+      info.doa = util.nowDate()
     site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
