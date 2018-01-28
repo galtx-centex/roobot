@@ -1,8 +1,10 @@
 # Description:
-#   Add a greyhound to the Available page
+#   Add a greyhound to the Available Hounds page
+#   Add a picture to a greyhound's bio
 #
 # Commands:
-#   hubot arrivals - Adds a new greyhound to the Available Hounds page
+#   hubot add - Show help text to add a greyhound
+#   arrival - Ask roobot how to add a greyhound like so: @roobot add?
 #
 # Author:
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail>
@@ -62,6 +64,13 @@ addPic = (greyhound, picUrl, callback) ->
       site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
+  # arrival help text
+  robot.respond /add/, (res) ->
+    res.reply "To add a greyhound, post a picture to #arrivals with the greyhound's name in the title and a comment in the format below:\n" +
+      "\tsex = female|male, dob = 2017-01-21, color = white and black, cats = yes|no\n" +
+      "Notice the equals sign between each attribute and its value, and the commas separating each pair of attribute and value.\n" +
+      "If no comment is added, the picture will be added to the greyhound whose name is in the title."
+
   robot.listen(
     (msg) ->
       msg.message?.channel.name is 'arrivals' and
