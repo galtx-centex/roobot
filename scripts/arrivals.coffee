@@ -4,7 +4,7 @@
 #
 # Commands:
 #   hubot add - Show help text to add a greyhound
-#   arrival - Ask roobot how to add a greyhound like so: @roobot add?
+#   arrivals - Find out how to add a greyhound by asking "@roobot add?"
 #
 # Author:
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail>
