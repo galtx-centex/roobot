@@ -67,7 +67,7 @@ module.exports = (robot) ->
   # arrival help text
   robot.respond /add/i, (res) ->
     res.reply "To add a greyhound, post a picture to #arrivals with the greyhound's name in the title and a comment in the format below:\n" +
-      "\tsex = female|male, dob = 2017-01-21, color = white and black, cats = yes|no\n" +
+      "\n`sex = female|male, dob = 2017-01-21, color = white and black, cats = yes|no`\n\n" +
       "Notice the equals sign between each attribute and its value, and the commas separating each pair of attribute and value.\n" +
       "If no comment is added, the picture will be added to the greyhound whose name is in the title."
 
