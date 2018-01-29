@@ -1,6 +1,6 @@
 {
   "name": "roobot",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "author": "Zach Whaley <zachbwhaley@gmail.com>",
   "description": "A simple helpful robot",
