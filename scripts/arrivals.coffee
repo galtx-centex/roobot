@@ -28,7 +28,7 @@ getInfo = (greyhound, comment) ->
     info[key] =
       switch key
         when 'dob' then new Date val
-        when 'cats' then val is 'yes'
+        when 'cats','pending' then val is 'yes'
         else val
   return info
 
