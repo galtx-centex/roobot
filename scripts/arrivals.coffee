@@ -17,21 +17,6 @@ git = require '../lib/git'
 site = require '../lib/site'
 util = require '../lib/util'
 
-getInfo = (greyhound, comment) ->
-  info =
-    layout: 'greyhound'
-    title: capitalize greyhound
-    date: util.nowDate()
-    category: 'available'
-  comment.toLowerCase().split(',').map (i) ->
-    [key, val] = i.split('=', 2).map (j) -> j.trim()
-    info[key] =
-      switch key
-        when 'dob' then new Date val
-        when 'cats','pending' then val is 'yes'
-        else val
-  return info
-
 arrival = (greyhound, picUrl, info, callback) ->
   idName = site.newGreyhound greyhound
   picName = "#{idName}#{path.extname(picUrl)}"
@@ -84,7 +69,7 @@ module.exports = (robot) ->
         email: res.message.user?.profile?.email
 
       if fileObj.initial_comment?
-        info = getInfo greyhound, fileObj.initial_comment.comment
+        info = site.newInfo greyhound, fileObj.initial_comment.comment
         gitOpts =
           message: "Add #{capitalize(greyhound)}! 🌟"
           branch: "arrival-#{greyhound}"
