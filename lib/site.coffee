@@ -6,6 +6,8 @@ yaml = require 'yamljs'
 matter = require 'gray-matter'
 capitalize = require 'capitalize'
 
+util = require './util'
+
 engines =
   yaml:
     parse: yaml.parse.bind(yaml)
