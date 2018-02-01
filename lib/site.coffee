@@ -4,6 +4,7 @@ fs = require 'fs'
 path = require 'path'
 yaml = require 'yamljs'
 matter = require 'gray-matter'
+capitalize = require 'capitalize'
 
 engines =
   yaml:
