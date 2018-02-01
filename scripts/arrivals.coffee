@@ -58,7 +58,7 @@ module.exports = (robot) ->
 
   robot.listen(
     (msg) ->
-      msg.message?.channel.name is 'arrivals' and
+      msg.message?.channel?.name is 'arrivals' and
       msg.message?.subtype is 'file_share'
     (res) ->
       fileObj = res.message.message.file
