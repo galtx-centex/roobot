@@ -37,6 +37,7 @@ self = module.exports =
     while fs.existsSync "#{self.sitePath}/_greyhounds/#{file}.md"
       num += 1
       file = "#{greyhound}#{num}"
+    console.log "New greyhound #{file}"
     return file
 
   loadGreyhound: (greyhound, callback) ->
@@ -44,11 +45,13 @@ self = module.exports =
     fs.readFile file, 'utf8', (err, data) ->
       if err
         return callback null, null
+      console.log "Loaded #{greyhound}"
       info = matter data, engines: engines
       callback info.data, info.content
 
   dumpGreyhound: (greyhound, info, bio, callback) ->
     file = "#{self.sitePath}/_greyhounds/#{greyhound}.md"
     data = matter.stringify bio, info, engines: engines
+    console.log "Dump #{greyhound}"
     fs.writeFile file, data, (err) ->
       callback err

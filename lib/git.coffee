@@ -19,6 +19,7 @@ pull = ->
     fs.stat repoPath, (err, stats) ->
       if err
         # Clone
+        console.log "clone #{repoURL}"
         Git.Clone.clone repoURL, repoPath, cloneOpts
         .then (repository) ->
           resolve repository
@@ -27,13 +28,17 @@ pull = ->
       else
         # Pull
         repo = null
+        console.log "open #{repoPath}"
         Git.Repository.open repoPath
         .then (repository) ->
           repo = repository
+          console.log "fetch #{cloneOpts.fetchOpts}"
           repo.fetchAll cloneOpts.fetchOpts
         .then ->
+          console.log "merge origin/source -> source"
           repo.mergeBranches 'source', 'origin/source'
         .then ->
+          console.log "checkout source"
           repo.checkoutBranch 'source'
         .then ->
           resolve repo
@@ -47,12 +52,15 @@ branch = (repo, name) ->
     repo.getHeadCommit()
     .then (oid) ->
       head = oid
+      console.log "reset #{head}"
       Git.Reset.reset repo, head, Git.Reset.TYPE.HARD
     .then (err) ->
       throw new Error "Failed hard reset" if err > 0
+      console.log "branch #{name}"
       repo.createBranch name, head, true
     .then (reference) ->
       ref = reference
+      console.log "checkout #{ref}"
       repo.checkoutBranch ref
     .then ->
       resolve ref
@@ -74,6 +82,7 @@ commit = (repo, user, message) ->
       tree = treeObj
       repo.getHeadCommit()
     .then (parent) ->
+      console.log "commit '#{message}'"
       author = Git.Signature.now user.name, user.email
       committer = Git.Signature.now 'RooBot', 'roobot@gpa-centex.org'
       repo.createCommit 'HEAD', author, committer, message, tree, [parent]
@@ -86,6 +95,7 @@ push = (repo, ref) ->
   new Promise (resolve, reject) ->
     repo.getRemote 'origin'
     .then (remote) ->
+      console.log "push #{ref}"
       pushOpts = callbacks: credentials: auth
       remote.push ["#{ref}:#{ref}"], pushOpts
     .then ->
@@ -95,6 +105,7 @@ push = (repo, ref) ->
 
 pullrequest = (title, head) ->
   new Promise (resolve, reject) ->
+    console.log "open PR #{title}"
     github = new GitHub {token: process.env.GITHUB_TOKEN}
     repo = github.getRepo repoName
     repo.createPullRequest {title: title, head: head, base: 'source'}
