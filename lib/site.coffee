@@ -30,8 +30,6 @@ self = module.exports =
             new Date val
           when 'cats','pending','permafoster'
             val is 'yes'
-          when 'age'
-            parseInt val, 10
           else
             val
     return info
