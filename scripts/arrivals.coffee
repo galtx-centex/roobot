@@ -18,8 +18,9 @@ site = require '../lib/site'
 util = require '../lib/util'
 
 arrival = (greyhound, picUrl, info, callback) ->
-  idName = site.newGreyhound greyhound
-  picName = "#{idName}#{path.extname(picUrl)}"
+  greyhound = util.sanitize greyhound
+  fileName = site.newGreyhound greyhound
+  picName = "#{fileName}#{path.extname(picUrl)}"
   picPath = "#{site.sitePath}/img/#{picName}"
   info.pic = picName
 
@@ -31,9 +32,10 @@ arrival = (greyhound, picUrl, info, callback) ->
     image.convert [picPath, '-thumbnail', '300x300^', '-gravity', 'center', '-extent', '300x300', thmPath], (err) ->
       if err?
         return callback "Thumbnail Error: #{err}"
-      site.dumpGreyhound idName, info, "", callback
+      site.dumpGreyhound fileName, info, "", callback
 
 addPic = (greyhound, picUrl, callback) ->
+  greyhound = util.sanitize greyhound
   site.loadGreyhound greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
@@ -62,7 +64,7 @@ module.exports = (robot) ->
       msg.message?.subtype is 'file_share'
     (res) ->
       fileObj = res.message.message.file
-      greyhound = fileObj.title.toLowerCase()
+      greyhound = fileObj.title.trim().toLowerCase()
       picUrl = fileObj.thumb_1024 ? fileObj.url_private
       gitUser =
         name: res.message.user?.real_name
@@ -72,7 +74,7 @@ module.exports = (robot) ->
         info = site.newInfo greyhound, fileObj.initial_comment.comment
         gitOpts =
           message: "Add #{capitalize(greyhound)}! 🌟"
-          branch: "arrival-#{greyhound}"
+          branch: "arrival-#{util.sanitize(greyhound)}"
           user: gitUser
         res.reply "Adding #{capitalize(greyhound)} to Available Hounds! 🌟\n" +
                   "Hang on a sec..."
@@ -81,7 +83,7 @@ module.exports = (robot) ->
       else
         gitOpts =
           message: "Add pic for #{capitalize(greyhound)}! 🖼️"
-          branch: "newpic-#{greyhound}"
+          branch: "newpic-#{util.sanitize(greyhound)}"
           user: gitUser
         res.reply "Adding new pic for #{capitalize(greyhound)}! 🖼️\n" +
                   "Hang on a sec..."
