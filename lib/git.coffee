@@ -13,7 +13,7 @@ repoPath = path.join __dirname, 'gpa-centex.org'
 auth = (url, username) ->
   Git.Cred.userpassPlaintextNew process.env.GITHUB_TOKEN, 'x-oauth-basic'
 
-pull = ->
+pull = (branch) ->
   new Promise (resolve, reject) ->
     cloneOpts = fetchOpts: callbacks: credentials: auth
     fs.stat repoPath, (err, stats) ->
@@ -35,11 +35,11 @@ pull = ->
           console.log "fetch #{cloneOpts.fetchOpts}"
           repo.fetchAll cloneOpts.fetchOpts
         .then ->
-          console.log "merge origin/source -> source"
-          repo.mergeBranches 'source', 'origin/source'
+          console.log "merge origin/#{branch} -> #{branch}"
+          repo.mergeBranches "#{branch}", "origin/#{branch}"
         .then ->
-          console.log "checkout source"
-          repo.checkoutBranch 'source'
+          console.log "checkout #{branch}"
+          repo.checkoutBranch "#{branch}"
         .then ->
           resolve repo
         .catch (err) ->
@@ -103,7 +103,7 @@ push = (repo, ref) ->
     .catch (err) ->
       reject "Push #{err}"
 
-pullrequest = (title, head) ->
+newPullRequest = (title, head) ->
   new Promise (resolve, reject) ->
     console.log "open PR #{title}"
     github = new GitHub {token: process.env.GITHUB_TOKEN}
@@ -114,9 +114,28 @@ pullrequest = (title, head) ->
     .catch (err) ->
       reject "PR #{err}"
 
+findPullRequest = (head) ->
+  new Promise (resolve, reject) ->
+    console.log "find PR #{head}"
+    github = new GitHub {token: process.env.GITHUB_TOKEN}
+    repo = github.getRepo repoName
+    repo.listPullRequests {state: 'open', head: "gpa-centex:#{head}"}
+    .then (res) ->
+      resolve res[0] ? null
+    .catch (err) ->
+      reject "PR #{err}"
+
 module.exports =
+  pullrequest: (head, callback) ->
+    findPullRequest head
+    .then (pr) ->
+      console.log "Found PR #{pr?.number}: #{pr?.title}"
+      callback pr, null
+    .catch (err) ->
+      callback null, err
+
   update: (action, args..., opts, callback) ->
-    pull()
+    pull 'source'
     .then (repo) ->
       opts.repo = repo
       branch opts.repo, opts.branch
@@ -133,8 +152,32 @@ module.exports =
     .then (oid) ->
       push opts.repo, opts.ref
     .then ->
-      pullrequest opts.message, opts.branch
+      newPullRequest opts.message, opts.branch
     .then (pr) ->
       callback "Pull Request ready ➜ #{pr.html_url}"
+    .catch (err) ->
+      callback err
+
+  append: (action, args..., opts, callback) ->
+    pull opts.branch
+    .then (repo) ->
+      opts.repo = repo
+      repo.getBranch opts.branch
+    .then (ref) ->
+      opts.ref = ref
+      new Promise (resolve, reject) ->
+        action args..., (err) ->
+          unless err?
+            resolve()
+          else
+            reject err
+    .then ->
+      commit opts.repo, opts.user, opts.message
+    .then (oid) ->
+      push opts.repo, opts.ref
+    .then ->
+      findPullRequest opts.branch
+    .then (pr) ->
+      callback "Pull Request updated ➜ #{pr.html_url}"
     .catch (err) ->
       callback err
