@@ -85,6 +85,13 @@ module.exports = (robot) ->
           user: gitUser
         res.reply "Adding new pic for #{capitalize(greyhound)}! 🖼️\n" +
                   "Hang on a sec..."
-        git.update addPic, greyhound, picUrl, gitOpts, (update) ->
-          res.reply update
+        git.pullrequest gitOpts.branch, (pr, err) ->
+          if err?
+            return res.reply err
+          if pr?
+            git.append addPic, greyhound, picUrl, gitOpts, (append) ->
+              res.reply append
+          else
+            git.update addPic, greyhound, picUrl, gitOpts, (update) ->
+              res.reply update
   )
