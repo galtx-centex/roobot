@@ -25,3 +25,6 @@ module.exports =
       # Delete the file async. (But we don't check the result)
       fs.unlink dest
       callback err.message
+
+  sanitize: (name) ->
+    return name.replace /\s+/g, '-'
