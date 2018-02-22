@@ -73,19 +73,19 @@ module.exports = (robot) ->
       if fileObj.initial_comment?
         info = site.newInfo greyhound, fileObj.initial_comment.comment
         gitOpts =
-          message: "Add #{capitalize(greyhound)}! 🌟"
+          message: "Add #{capitalize.words(greyhound)}! 🌟"
           branch: "arrival-#{util.sanitize(greyhound)}"
           user: gitUser
-        res.reply "Adding #{capitalize(greyhound)} to Available Hounds! 🌟\n" +
+        res.reply "Adding #{capitalize.words(greyhound)} to Available Hounds! 🌟\n" +
                   "Hang on a sec..."
         git.update arrival, greyhound, picUrl, info, gitOpts, (update) ->
           res.reply update
       else
         gitOpts =
-          message: "Add pic for #{capitalize(greyhound)}! 🖼️"
+          message: "Add pic for #{capitalize.words(greyhound)}! 🖼️"
           branch: "newpic-#{util.sanitize(greyhound)}"
           user: gitUser
-        res.reply "Adding new pic for #{capitalize(greyhound)}! 🖼️\n" +
+        res.reply "Adding new pic for #{capitalize.words(greyhound)}! 🖼️\n" +
                   "Hang on a sec..."
         git.pullrequest gitOpts.branch, (pr, err) ->
           if err?

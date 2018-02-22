@@ -19,9 +19,9 @@ adopt = (greyhound, doa, callback) ->
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if info.category is 'deceased'
-      return callback "#{capitalize(greyhound)} has crossed the Rainbow Bridge 😢"
+      return callback "#{capitalize.words(greyhound)} has crossed the Rainbow Bridge 😢"
     if info.category is 'adopted'
-      return callback "#{capitalize(greyhound)} has already been adopted 😝"
+      return callback "#{capitalize.words(greyhound)} has already been adopted 😝"
 
     info.category = 'adopted'
     if doa?
@@ -35,13 +35,13 @@ module.exports = (robot) ->
     greyhound = res.match[1]?.toLowerCase()
     doa = res.match[2]
     gitOpts =
-      message: "#{capitalize(greyhound)} Adopted! 💗"
+      message: "#{capitalize.words(greyhound)} Adopted! 💗"
       branch: "adopt-#{greyhound}"
       user:
         name: res.message.user?.real_name
         email: res.message.user?.profile?.email
 
-    res.reply "Moving #{capitalize(greyhound)} to Happy Tails! 💗\n" +
+    res.reply "Moving #{capitalize.words(greyhound)} to Happy Tails! 💗\n" +
               "Hang on a sec..."
 
     git.update adopt, greyhound, doa, gitOpts, (update) ->

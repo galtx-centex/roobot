@@ -24,13 +24,13 @@ pending = (greyhound, pending, callback) ->
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if info.category is 'deceased'
-      return callback "#{capitalize(greyhound)} has crossed the Rainbow Bridge 😢"
+      return callback "#{capitalize.words(greyhound)} has crossed the Rainbow Bridge 😢"
     if info.category is 'adopted'
-      return callback "#{capitalize(greyhound)} has already been adopted 😝"
+      return callback "#{capitalize.words(greyhound)} has already been adopted 😝"
     if pending and info.pending is yes
-      return callback "#{capitalize(greyhound)} is already pending adoption 😝"
+      return callback "#{capitalize.words(greyhound)} is already pending adoption 😝"
     if not pending and info.pending is no
-      return callback "#{capitalize(greyhound)} is already not pending adoption 😝"
+      return callback "#{capitalize.words(greyhound)} is already not pending adoption 😝"
 
     info.pending = pending
     site.dumpGreyhound greyhound, info, bio, callback
@@ -44,13 +44,13 @@ module.exports = (robot) ->
       pend = yes
 
     gitOpts =
-      message: "#{capitalize(greyhound)} #{pendingMessage(pend)}"
+      message: "#{capitalize.words(greyhound)} #{pendingMessage(pend)}"
       branch: "#{pendingBranch(pend)}-#{greyhound}"
       user:
         name: res.message.user?.real_name
         email: res.message.user?.profile?.email
 
-    res.reply "Labeling #{capitalize(greyhound)} as #{pendingMessage(pend)}\n" +
+    res.reply "Labeling #{capitalize.words(greyhound)} as #{pendingMessage(pend)}\n" +
               "Hang on a sec..."
 
     git.update pending, greyhound, pend, gitOpts, (update) ->

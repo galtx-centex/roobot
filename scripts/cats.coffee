@@ -21,7 +21,7 @@ cats = (greyhound, catsafe, callback) ->
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if info.cats is catsafe
-      return callback "#{capitalize(greyhound)} is already #{catString(catsafe)} 😝"
+      return callback "#{capitalize.words(greyhound)} is already #{catString(catsafe)} 😝"
 
     info.cats = catsafe
     site.dumpGreyhound greyhound, info, bio, callback
@@ -37,13 +37,13 @@ module.exports = (robot) ->
     catsafe = catsafe is 'yes'
 
     gitOpts =
-      message: "#{capitalize(greyhound)} is #{catString(catsafe)}"
+      message: "#{capitalize.words(greyhound)} is #{catString(catsafe)}"
       branch: "cats-#{greyhound}"
       user:
         name: res.message.user?.real_name
         email: res.message.user?.profile?.email
 
-    res.reply "Labeling #{capitalize(greyhound)} as #{catString(catsafe)}\n" +
+    res.reply "Labeling #{capitalize.words(greyhound)} as #{catString(catsafe)}\n" +
               "Hang on a sec..."
 
     git.update cats, greyhound, catsafe, gitOpts, (update) ->

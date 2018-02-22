@@ -18,7 +18,7 @@ goodbye = (greyhound, dod, callback) ->
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if info.category is 'deceased'
-      return callback "#{capitalize(greyhound)} has already crossed the Rainbow Bridge 😢"
+      return callback "#{capitalize.words(greyhound)} has already crossed the Rainbow Bridge 😢"
 
     info.category = 'deceased'
     info.dod = new Date(dod) if dod?
@@ -29,13 +29,13 @@ module.exports = (robot) ->
     greyhound = res.match[1]?.toLowerCase()
     dod = res.match[2]
     gitOpts =
-      message: "#{capitalize(greyhound)} crossed the Rainbow Bridge 😢"
+      message: "#{capitalize.words(greyhound)} crossed the Rainbow Bridge 😢"
       branch: "goodbye-#{greyhound}"
       user:
         name: res.message.user?.real_name
         email: res.message.user?.profile?.email
 
-    res.reply "Moving #{capitalize(greyhound)} to the Rainbow Bridge 😢\n" +
+    res.reply "Moving #{capitalize.words(greyhound)} to the Rainbow Bridge 😢\n" +
               "Hang on a sec..."
 
     git.update goodbye, greyhound, dod, gitOpts, (update) ->
