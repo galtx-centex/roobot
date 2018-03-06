@@ -14,7 +14,7 @@ engines =
     stringify: yaml.dump.bind(yaml)
 
 self = module.exports =
-  sitePath: path.join __dirname, 'gpa-centex.org'
+  sitePath: path.join __dirname, 'galtx-centex.org'
 
   newInfo: (greyhound, infoStr) ->
     info =

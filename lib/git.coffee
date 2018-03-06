@@ -6,9 +6,9 @@ Git = require 'nodegit'
 GitHub = require 'github-api'
 Promise = require 'bluebird'
 
-repoName = 'gpa-centex/gpa-centex.github.io'
+repoName = 'galtx-centex/galtx-centex.github.io'
 repoURL = "https://github.com/#{repoName}.git"
-repoPath = path.join __dirname, 'gpa-centex.org'
+repoPath = path.join __dirname, 'galtx-centex.org'
 
 auth = (url, username) ->
   Git.Cred.userpassPlaintextNew process.env.GITHUB_TOKEN, 'x-oauth-basic'
@@ -84,7 +84,7 @@ commit = (repo, user, message) ->
     .then (parent) ->
       console.log "commit '#{message}'"
       author = Git.Signature.now user.name, user.email
-      committer = Git.Signature.now 'RooBot', 'roobot@gpa-centex.org'
+      committer = Git.Signature.now 'RooBot', 'roobot@galtx-centex.org'
       repo.createCommit 'HEAD', author, committer, message, tree, [parent]
     .then (oid) ->
       resolve oid
@@ -119,7 +119,7 @@ findPullRequest = (head) ->
     console.log "find PR #{head}"
     github = new GitHub {token: process.env.GITHUB_TOKEN}
     repo = github.getRepo repoName
-    repo.listPullRequests {state: 'open', head: "gpa-centex:#{head}"}
+    repo.listPullRequests {state: 'open', head: "galtx-centex:#{head}"}
     .then (res) ->
       resolve res[0] ? null
     .catch (err) ->
