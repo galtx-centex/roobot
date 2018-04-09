@@ -7,8 +7,6 @@
 # Author:
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail.com>
 
-capitalize = require 'capitalize'
-
 git = require '../lib/git'
 site = require '../lib/site'
 util = require '../lib/util'
@@ -19,9 +17,9 @@ adopt = (greyhound, doa, callback) ->
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if info.category is 'deceased'
-      return callback "#{capitalize.words(greyhound)} has crossed the Rainbow Bridge 😢"
+      return callback "#{util.display(greyhound)} has crossed the Rainbow Bridge 😢"
     if info.category is 'adopted'
-      return callback "#{capitalize.words(greyhound)} has already been adopted 😝"
+      return callback "#{util.display(greyhound)} has already been adopted 😝"
 
     info.category = 'adopted'
     if doa?
@@ -31,17 +29,17 @@ adopt = (greyhound, doa, callback) ->
     site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
-  robot.respond /adopt (\w+)\s?(\d{4}-\d{1,2}-\d{1,2})?/i, (res) ->
-    greyhound = res.match[1]?.toLowerCase()
+  robot.respond /adopt (.+?)\s*(\d{4}-\d{1,2}-\d{1,2})?$/i, (res) ->
+    greyhound = util.sanitize res.match[1]
     doa = res.match[2]
     gitOpts =
-      message: "#{capitalize.words(greyhound)} Adopted! 💗"
+      message: "#{util.display(greyhound)} Adopted! 💗"
       branch: "adopt-#{greyhound}"
       user:
         name: res.message.user?.real_name
         email: res.message.user?.profile?.email
 
-    res.reply "Moving #{capitalize.words(greyhound)} to Happy Tails! 💗\n" +
+    res.reply "Moving #{util.display(greyhound)} to Happy Tails! 💗\n" +
               "Hang on a sec..."
 
     git.update adopt, greyhound, doa, gitOpts, (update) ->

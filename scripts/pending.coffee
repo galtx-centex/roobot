@@ -7,10 +7,9 @@
 # Author:
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail.com>
 
-capitalize = require 'capitalize'
-
 git = require '../lib/git'
 site = require '../lib/site'
+util = require '../lib/util'
 
 pendingBranch = (pending) ->
   return if pending then "pending" else "not-pending"
@@ -24,33 +23,33 @@ pending = (greyhound, pending, callback) ->
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if info.category is 'deceased'
-      return callback "#{capitalize.words(greyhound)} has crossed the Rainbow Bridge 😢"
+      return callback "#{util.display(greyhound)} has crossed the Rainbow Bridge 😢"
     if info.category is 'adopted'
-      return callback "#{capitalize.words(greyhound)} has already been adopted 😝"
+      return callback "#{util.display(greyhound)} has already been adopted 😝"
     if pending and info.pending is yes
-      return callback "#{capitalize.words(greyhound)} is already pending adoption 😝"
+      return callback "#{util.display(greyhound)} is already pending adoption 😝"
     if not pending and info.pending is no
-      return callback "#{capitalize.words(greyhound)} is already not pending adoption 😝"
+      return callback "#{util.display(greyhound)} is already not pending adoption 😝"
 
     info.pending = pending
     site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
-  robot.respond /pending (\w+)\s?(\w+)?/i, (res) ->
-    greyhound = res.match[1]?.toLowerCase()
+  robot.respond /pending (.+?)\s*(yes|no)?$/i, (res) ->
+    greyhound = util.sanitize res.match[1]
     if res.match[2]?
       pend = if res.match[2].toLowerCase() is 'no' then no else yes
     else
       pend = yes
 
     gitOpts =
-      message: "#{capitalize.words(greyhound)} #{pendingMessage(pend)}"
+      message: "#{util.display(greyhound)} #{pendingMessage(pend)}"
       branch: "#{pendingBranch(pend)}-#{greyhound}"
       user:
         name: res.message.user?.real_name
         email: res.message.user?.profile?.email
 
-    res.reply "Labeling #{capitalize.words(greyhound)} as #{pendingMessage(pend)}\n" +
+    res.reply "Labeling #{util.display(greyhound)} as #{pendingMessage(pend)}\n" +
               "Hang on a sec..."
 
     git.update pending, greyhound, pend, gitOpts, (update) ->

@@ -11,14 +11,12 @@
 
 path = require 'path'
 image = require 'imagemagick'
-capitalize = require 'capitalize'
 
 git = require '../lib/git'
 site = require '../lib/site'
 util = require '../lib/util'
 
 arrival = (greyhound, picUrl, info, callback) ->
-  greyhound = util.sanitize greyhound
   fileName = site.newGreyhound greyhound
   picName = "#{fileName}#{path.extname(picUrl)}"
   picPath = "#{site.sitePath}/img/#{picName}"
@@ -35,7 +33,6 @@ arrival = (greyhound, picUrl, info, callback) ->
       site.dumpGreyhound fileName, info, "", callback
 
 addPic = (greyhound, picUrl, callback) ->
-  greyhound = util.sanitize greyhound
   site.loadGreyhound greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
@@ -64,7 +61,7 @@ module.exports = (robot) ->
       msg.message?.subtype is 'file_share'
     (res) ->
       fileObj = res.message.message.file
-      greyhound = fileObj.title.trim().toLowerCase()
+      greyhound = util.sanitize fileObj.title
       picUrl = fileObj.thumb_1024 ? fileObj.url_private
       gitUser =
         name: res.message.user?.real_name
@@ -73,19 +70,19 @@ module.exports = (robot) ->
       if fileObj.initial_comment?
         info = site.newInfo greyhound, fileObj.initial_comment.comment
         gitOpts =
-          message: "Add #{capitalize.words(greyhound)}! 🌟"
-          branch: "arrival-#{util.sanitize(greyhound)}"
+          message: "Add #{util.display(greyhound)}! 🌟"
+          branch: "arrival-#{greyhound}"
           user: gitUser
-        res.reply "Adding #{capitalize.words(greyhound)} to Available Hounds! 🌟\n" +
+        res.reply "Adding #{util.display(greyhound)} to Available Hounds! 🌟\n" +
                   "Hang on a sec..."
         git.update arrival, greyhound, picUrl, info, gitOpts, (update) ->
           res.reply update
       else
         gitOpts =
-          message: "Add pic for #{capitalize.words(greyhound)}! 🖼️"
-          branch: "newpic-#{util.sanitize(greyhound)}"
+          message: "Add pic for #{util.display(greyhound)}! 🖼️"
+          branch: "newpic-#{greyhound}"
           user: gitUser
-        res.reply "Adding new pic for #{capitalize.words(greyhound)}! 🖼️\n" +
+        res.reply "Adding new pic for #{util.display(greyhound)}! 🖼️\n" +
                   "Hang on a sec..."
         git.pullrequest gitOpts.branch, (pr, err) ->
           if err?

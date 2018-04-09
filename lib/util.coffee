@@ -2,6 +2,7 @@
 fs = require 'fs'
 url = require 'url'
 https = require 'https'
+capitalize = require 'capitalize'
 
 module.exports =
   nowDate: () ->
@@ -27,4 +28,7 @@ module.exports =
       callback err.message
 
   sanitize: (name) ->
-    return name.replace /\s+/g, '-'
+    return name.trim().toLowerCase().replace(/\s+/g, '-')
+
+  display: (name) ->
+    return capitalize.words(name.replace('-', ' '))
