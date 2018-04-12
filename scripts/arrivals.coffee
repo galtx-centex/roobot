@@ -63,25 +63,21 @@ module.exports = (robot) ->
       fileObj = res.message.message.file
       greyhound = util.sanitize fileObj.title
       picUrl = fileObj.thumb_1024 ? fileObj.url_private
-      gitUser =
-        name: res.message.user?.real_name
-        email: res.message.user?.profile?.email
+      gitOpts =
+        branch: "arrival-#{greyhound}"
+        user:
+          name: res.message.user?.real_name
+          email: res.message.user?.profile?.email
 
       if fileObj.initial_comment?
         info = site.newInfo greyhound, fileObj.initial_comment.comment
-        gitOpts =
-          message: "Add #{util.display(greyhound)}! 🌟"
-          branch: "arrival-#{greyhound}"
-          user: gitUser
+        gitOpts.message = "Add #{util.display(greyhound)}! 🌟"
         res.reply "Adding #{util.display(greyhound)} to Available Hounds! 🌟\n" +
                   "Hang on a sec..."
         git.update arrival, greyhound, picUrl, info, gitOpts, (update) ->
           res.reply update
       else
-        gitOpts =
-          message: "Add pic for #{util.display(greyhound)}! 🖼️"
-          branch: "newpic-#{greyhound}"
-          user: gitUser
+        gitOpts.message = "Add pic for #{util.display(greyhound)}! 🖼️"
         res.reply "Adding new pic for #{util.display(greyhound)}! 🖼️\n" +
                   "Hang on a sec..."
         git.pullrequest gitOpts.branch, (pr, err) ->
