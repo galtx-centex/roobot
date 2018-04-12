@@ -52,5 +52,5 @@ module.exports = (robot) ->
     res.reply "Labeling #{util.display(greyhound)} as #{pendingMessage(pend)}\n" +
               "Hang on a sec..."
 
-    git.update pending, greyhound, pend, gitOpts, (update) ->
+    git.add pending, greyhound, pend, gitOpts, (update) ->
       res.reply update

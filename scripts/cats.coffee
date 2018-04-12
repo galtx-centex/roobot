@@ -43,5 +43,5 @@ module.exports = (robot) ->
     res.reply "Labeling #{util.display(greyhound)} as #{catString(catsafe)}\n" +
               "Hang on a sec..."
 
-    git.update cats, greyhound, catsafe, gitOpts, (update) ->
+    git.add cats, greyhound, catsafe, gitOpts, (update) ->
       res.reply update

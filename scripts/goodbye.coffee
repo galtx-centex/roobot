@@ -37,5 +37,5 @@ module.exports = (robot) ->
     res.reply "Moving #{util.display(greyhound)} to the Rainbow Bridge 😢\n" +
               "Hang on a sec..."
 
-    git.update goodbye, greyhound, dod, gitOpts, (update) ->
+    git.add goodbye, greyhound, dod, gitOpts, (update) ->
       res.reply update

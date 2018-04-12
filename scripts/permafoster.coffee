@@ -39,5 +39,5 @@ module.exports = (robot) ->
     res.reply "Labeling #{util.display(greyhound)} as a Permanent Foster 🤕\n" +
               "Hang on a sec..."
 
-    git.update permafoster, greyhound, gitOpts, (update) ->
+    git.add permafoster, greyhound, gitOpts, (update) ->
       res.reply update

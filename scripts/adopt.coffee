@@ -42,5 +42,5 @@ module.exports = (robot) ->
     res.reply "Moving #{util.display(greyhound)} to Happy Tails! 💗\n" +
               "Hang on a sec..."
 
-    git.update adopt, greyhound, doa, gitOpts, (update) ->
+    git.add adopt, greyhound, doa, gitOpts, (update) ->
       res.reply update

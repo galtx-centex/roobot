@@ -13,37 +13,41 @@ repoPath = path.join __dirname, 'galtx-centex.org'
 auth = (url, username) ->
   Git.Cred.userpassPlaintextNew process.env.GITHUB_TOKEN, 'x-oauth-basic'
 
-pull = (branch) ->
+fetch = () ->
   new Promise (resolve, reject) ->
     cloneOpts = fetchOpts: callbacks: credentials: auth
     fs.stat repoPath, (err, stats) ->
       if err
         # Clone
-        console.log "clone #{repoURL}"
+        console.log "clone #{repoURL} to #{repoPath}"
         Git.Clone.clone repoURL, repoPath, cloneOpts
-        .then (repository) ->
-          resolve repository
+        .then (repo) ->
+          resolve repo
         .catch (err) ->
           reject "Clone #{err}"
       else
-        # Pull
+        # Fetch
         repo = null
         console.log "open #{repoPath}"
         Git.Repository.open repoPath
-        .then (repository) ->
-          repo = repository
+        .then (repo) ->
           console.log "fetch #{cloneOpts.fetchOpts}"
           repo.fetchAll cloneOpts.fetchOpts
-        .then ->
-          console.log "merge origin/#{branch} -> #{branch}"
-          repo.mergeBranches "#{branch}", "origin/#{branch}"
-        .then ->
-          console.log "checkout #{branch}"
-          repo.checkoutBranch "#{branch}"
-        .then ->
           resolve repo
         .catch (err) ->
-          reject "Pull #{err}"
+          reject "Fetch #{err}"
+
+checkout = (repo, branch) ->
+  new Promise (resolve, reject) ->
+    ref = null
+    repo.getReference "origin/#{branch}"
+    .then (reference) ->
+      ref = reference
+      repo.checkoutRef ref
+    .then () ->
+      resolve ref
+    .catch (err) ->
+      reject "Checkout #{err}"
 
 branch = (repo, name) ->
   new Promise (resolve, reject) ->
@@ -134,10 +138,12 @@ module.exports =
     .catch (err) ->
       callback null, err
 
-  update: (action, args..., opts, callback) ->
-    pull 'source'
+  add: (action, args..., opts, callback) ->
+    fetch()
     .then (repo) ->
       opts.repo = repo
+      checkout opts.repo, 'source'
+    .then (ref) ->
       branch opts.repo, opts.branch
     .then (ref) ->
       opts.ref = ref
@@ -158,11 +164,11 @@ module.exports =
     .catch (err) ->
       callback err
 
-  append: (action, args..., opts, callback) ->
-    pull opts.branch
+  update: (action, args..., opts, callback) ->
+    fetch()
     .then (repo) ->
       opts.repo = repo
-      repo.getBranch opts.branch
+      checkout opts.repo, opts.branch
     .then (ref) ->
       opts.ref = ref
       new Promise (resolve, reject) ->
