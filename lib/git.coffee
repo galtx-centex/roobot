@@ -80,7 +80,7 @@ push = (repo, src, dst) ->
     .then (remote) ->
       console.log "push #{src}:#{dst}"
       pushOpts = callbacks: credentials: auth
-      remote.push ["#{src}:#{dst}"], pushOpts
+      remote.push ["#{src}:refs/heads/#{dst}"], pushOpts
     .then () ->
       resolve()
     .catch (err) ->
