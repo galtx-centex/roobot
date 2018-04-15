@@ -104,13 +104,13 @@ findPullRequest = (head) ->
     repo = github.getRepo repoName
     repo.listPullRequests {state: 'open', head: "galtx-centex:#{head}"}
     .then (res) ->
-      console.log "PR list #{res} #{res[0]?}"
+      console.log "PR list %j", res
       reject "PR testing"
     .catch (err) ->
       reject "PR #{err}"
 
 module.exports =
-  pullrequest: (head, callback) ->
+  findPR: (head, callback) ->
     findPullRequest head
     .then (pr) ->
       console.log "Found PR #{pr?.number}: #{pr?.title}"
