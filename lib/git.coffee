@@ -58,7 +58,7 @@ commit = (repo, user, message) ->
     .then (index) ->
       ndx = index
       ndx.addAll()
-    .then ->
+    .then () ->
       ndx.write()
       ndx.writeTree()
     .then (treeObj) ->
@@ -81,7 +81,7 @@ push = (repo, src, dst) ->
       console.log "push #{src}:#{dst}"
       pushOpts = callbacks: credentials: auth
       remote.push ["#{src}:#{dst}"], pushOpts
-    .then ->
+    .then () ->
       resolve()
     .catch (err) ->
       reject "Push #{err}"
@@ -92,8 +92,8 @@ newPullRequest = (title, head) ->
     github = new GitHub {token: process.env.GITHUB_TOKEN}
     repo = github.getRepo repoName
     repo.createPullRequest {title: title, head: head, base: 'source'}
-    .then (res) ->
-      resolve res.data
+    .then ({data}) ->
+      resolve data
     .catch (err) ->
       reject "PR #{err}"
 
@@ -103,8 +103,8 @@ findPullRequest = (head) ->
     github = new GitHub {token: process.env.GITHUB_TOKEN}
     repo = github.getRepo repoName
     repo.listPullRequests {state: 'open', head: "galtx-centex:#{head}"}
-    .then (res) ->
-      console.log "PR list %j", res
+    .then ({data}) ->
+      console.log "PR list %j #{data[0]?}", data
       reject "PR testing"
     .catch (err) ->
       reject "PR #{err}"
@@ -134,7 +134,7 @@ module.exports =
       commit opts.repo, opts.user, opts.message
     .then (oid) ->
       push opts.repo, oid, opts.branch
-    .then ->
+    .then () ->
       newPullRequest opts.message, opts.branch
     .then (pr) ->
       callback "Pull Request ready ➜ #{pr.html_url}"
