@@ -12,10 +12,16 @@ site = require '../lib/site'
 util = require '../lib/util'
 
 pendingBranch = (pending) ->
-  return if pending then "pending" else "not-pending"
+  if pending
+    "pending"
+  else
+    "not-pending"
 
 pendingMessage = (pending) ->
-  return if pending then "Pending Adoption! 🎉" else "Not Pending Adoption 😞"
+  if pending
+    "Pending Adoption! 🎉"
+  else
+    "Not Pending Adoption 😞"
 
 pending = (greyhound, pending, callback) ->
   site.loadGreyhound greyhound, (info, bio) ->
@@ -38,7 +44,7 @@ module.exports = (robot) ->
   robot.respond /pending (.+?)\s*(yes|no)?$/i, (res) ->
     greyhound = util.sanitize res.match[1]
     if res.match[2]?
-      pend = if res.match[2].toLowerCase() is 'no' then no else yes
+      pend = res.match[2].toLowerCase() is 'yes'
     else
       pend = yes
 
