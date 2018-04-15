@@ -31,7 +31,7 @@ fetch = () ->
         console.log "open #{repoPath}"
         Git.Repository.open repoPath
         .then (repo) ->
-          console.log "fetch #{cloneOpts.fetchOpts}"
+          console.log "fetch all"
           repo.fetchAll cloneOpts.fetchOpts
           resolve repo
         .catch (err) ->
@@ -43,6 +43,7 @@ checkout = (repo, branch) ->
     repo.getReference "origin/#{branch}"
     .then (reference) ->
       ref = reference
+      console.log "ref checkout #{ref}"
       repo.checkoutRef ref
     .then () ->
       resolve ref
@@ -64,7 +65,7 @@ branch = (repo, name) ->
       repo.createBranch name, head, true
     .then (reference) ->
       ref = reference
-      console.log "checkout #{ref}"
+      console.log "branch checkout #{ref}"
       repo.checkoutBranch ref
     .then ->
       resolve ref
@@ -125,7 +126,8 @@ findPullRequest = (head) ->
     repo = github.getRepo repoName
     repo.listPullRequests {state: 'open', head: "galtx-centex:#{head}"}
     .then (res) ->
-      resolve res[0] ? null
+      console.log "PR list #{res} #{res[0]?}"
+      reject "PR testing"
     .catch (err) ->
       reject "PR #{err}"
 
