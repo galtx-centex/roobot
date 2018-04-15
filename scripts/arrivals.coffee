@@ -77,8 +77,8 @@ module.exports = (robot) ->
         git.add arrival, greyhound, picUrl, info, gitOpts, (update) ->
           res.reply update
       else
-        gitOpts.message = "Add pic for #{util.display(greyhound)}! 🖼️"
-        res.reply "Adding new pic for #{util.display(greyhound)}! 🖼️\n" +
+        gitOpts.message = "Add pic for #{util.display(greyhound)}! 😁"
+        res.reply "Adding new pic for #{util.display(greyhound)}! 😁\n" +
                   "Hang on a sec..."
         git.pullrequest gitOpts.branch, (pr, err) ->
           if err?

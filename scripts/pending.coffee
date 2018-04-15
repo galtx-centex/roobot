@@ -15,7 +15,7 @@ pendingBranch = (pending) ->
   return if pending then "pending" else "not-pending"
 
 pendingMessage = (pending) ->
-  return if pending then "Pending Adoption! 🎉" else "Not Pending Adoption 🤷"
+  return if pending then "Pending Adoption! 🎉" else "Not Pending Adoption 😞"
 
 pending = (greyhound, pending, callback) ->
   site.loadGreyhound greyhound, (info, bio) ->
