@@ -74,7 +74,7 @@ module.exports = (robot) ->
         gitOpts.message = "Add #{util.display(greyhound)}! 🌟"
         res.reply "Adding #{util.display(greyhound)} to Available Hounds! 🌟\n" +
                   "Hang on a sec..."
-        git.add arrival, greyhound, picUrl, info, gitOpts, (update) ->
+        git.update arrival, greyhound, picUrl, info, gitOpts, (update) ->
           res.reply update
       else
         gitOpts.message = "Add pic for #{util.display(greyhound)}! 😁"
@@ -84,9 +84,8 @@ module.exports = (robot) ->
           if err?
             return res.reply err
           if pr?
-            git.update addPic, greyhound, picUrl, gitOpts, (append) ->
-              res.reply append
-          else
-            git.add addPic, greyhound, picUrl, gitOpts, (update) ->
-              res.reply update
+            gitOpts.base = gitOpts.branch
+
+          git.update addPic, greyhound, picUrl, gitOpts, (update) ->
+            res.reply update
   )

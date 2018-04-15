@@ -50,28 +50,6 @@ checkout = (repo, branch) ->
     .catch (err) ->
       reject "Checkout #{err}"
 
-branch = (repo, name) ->
-  new Promise (resolve, reject) ->
-    ref = null
-    head = null
-    repo.getHeadCommit()
-    .then (oid) ->
-      head = oid
-      console.log "reset #{head}"
-      Git.Reset.reset repo, head, Git.Reset.TYPE.HARD
-    .then (err) ->
-      throw new Error "Failed hard reset" if err > 0
-      console.log "branch #{name}"
-      repo.createBranch name, head, true
-    .then (reference) ->
-      ref = reference
-      console.log "branch checkout #{ref}"
-      repo.checkoutBranch ref
-    .then ->
-      resolve ref
-    .catch (err) ->
-      reject "Branch #{err}"
-
 commit = (repo, user, message) ->
   new Promise (resolve, reject) ->
     ndx = null
@@ -96,13 +74,13 @@ commit = (repo, user, message) ->
     .catch (err) ->
       reject "Commit #{err}"
 
-push = (repo, ref) ->
+push = (repo, src, dst) ->
   new Promise (resolve, reject) ->
     repo.getRemote 'origin'
     .then (remote) ->
-      console.log "push #{ref}"
+      console.log "push #{src}:#{dst}"
       pushOpts = callbacks: credentials: auth
-      remote.push ["#{ref}:#{ref}"], pushOpts
+      remote.push ["#{src}:#{dst}"], pushOpts
     .then ->
       resolve()
     .catch (err) ->
@@ -140,52 +118,25 @@ module.exports =
     .catch (err) ->
       callback null, err
 
-  add: (action, args..., opts, callback) ->
-    fetch()
-    .then (repo) ->
-      opts.repo = repo
-      checkout opts.repo, 'source'
-    .then (ref) ->
-      branch opts.repo, opts.branch
-    .then (ref) ->
-      opts.ref = ref
-      new Promise (resolve, reject) ->
-        action args..., (err) ->
-          unless err?
-            resolve()
-          else
-            reject err
-    .then ->
-      commit opts.repo, opts.user, opts.message
-    .then (oid) ->
-      push opts.repo, opts.ref
-    .then ->
-      newPullRequest opts.message, opts.branch
-    .then (pr) ->
-      callback "Pull Request ready ➜ #{pr.html_url}"
-    .catch (err) ->
-      callback err
-
   update: (action, args..., opts, callback) ->
     fetch()
     .then (repo) ->
       opts.repo = repo
-      checkout opts.repo, opts.branch
+      checkout opts.repo, opts.base ? 'source'
     .then (ref) ->
-      opts.ref = ref
       new Promise (resolve, reject) ->
         action args..., (err) ->
           unless err?
             resolve()
           else
             reject err
-    .then ->
+    .then () ->
       commit opts.repo, opts.user, opts.message
     .then (oid) ->
-      push opts.repo, opts.ref
+      push opts.repo, oid, opts.branch
     .then ->
-      findPullRequest opts.branch
+      newPullRequest opts.message, opts.branch
     .then (pr) ->
-      callback "Pull Request updated ➜ #{pr.html_url}"
+      callback "Pull Request ready ➜ #{pr.html_url}"
     .catch (err) ->
       callback err
