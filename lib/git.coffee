@@ -76,6 +76,7 @@ commit = (repo, user, message) ->
 
 tag = (repo, oid) ->
   new Promise (resolve, reject) ->
+    console.log "tag #{oid}"
     repo.createLightweightTag oid, "#{oid}-tag"
     .then (reference) ->
       resolve reference
@@ -84,11 +85,12 @@ tag = (repo, oid) ->
 
 push = (repo, src, dst) ->
   new Promise (resolve, reject) ->
+    refSpec = "#{src}:refs/heads/#{dst}"
     repo.getRemote 'origin'
     .then (remote) ->
-      console.log "push #{src}:#{dst}"
+      console.log "push origin #{refSpec}"
       pushOpts = callbacks: credentials: auth
-      remote.push ["#{src}:refs/heads/#{dst}"], pushOpts
+      remote.push ["#{refSpec}"], pushOpts
     .then () ->
       resolve()
     .catch (err) ->
