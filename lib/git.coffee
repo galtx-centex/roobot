@@ -132,7 +132,7 @@ module.exports =
     fetch()
     .then (repo) ->
       opts.repo = repo
-      checkout opts.repo, opts.base ? 'source'
+      checkout opts.repo, opts.pr ? 'source'
     .then (ref) ->
       new Promise (resolve, reject) ->
         action args..., (err) ->
@@ -147,7 +147,7 @@ module.exports =
     .then (tag) ->
       push opts.repo, tag, opts.branch
     .then () ->
-      newPullRequest opts.message, opts.branch
+      newPullRequest opts.message, opts.branch unless opts.pr?
     .then (pr) ->
       callback "Pull Request ready ➜ #{pr.html_url}"
     .catch (err) ->

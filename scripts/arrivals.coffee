@@ -84,7 +84,7 @@ module.exports = (robot) ->
           if err?
             return res.reply err
           if pr?
-            gitOpts.base = gitOpts.branch
+            gitOpts.pr = pr.head.ref
 
           git.update addPic, greyhound, picUrl, gitOpts, (update) ->
             res.reply update
