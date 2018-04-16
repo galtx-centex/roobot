@@ -76,7 +76,7 @@ commit = (repo, user, message) ->
 
 tag = (repo, oid) ->
   new Promise (resolve, reject) ->
-    repo.createLightWeightTag oid, "#{oid}-tag"
+    repo.createLightweightTag oid, "#{oid}-tag"
     .then (reference) ->
       resolve reference
     .catch (err) ->
