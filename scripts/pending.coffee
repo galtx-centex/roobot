@@ -11,12 +11,6 @@ git = require '../lib/git'
 site = require '../lib/site'
 util = require '../lib/util'
 
-pendingBranch = (pending) ->
-  if pending
-    "pending"
-  else
-    "not-pending"
-
 pendingMessage = (pending) ->
   if pending
     "Pending Adoption! 🎉"
@@ -49,7 +43,7 @@ module.exports = (robot) ->
 
     gitOpts =
       message: "#{util.display(greyhound)} #{pendingMessage(pend)}"
-      branch: "#{pendingBranch(pend)}-#{greyhound}"
+      branch: "pending-#{greyhound}"
       user:
         name: res.message.user?.real_name
         email: res.message.user?.profile?.email
