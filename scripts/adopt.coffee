@@ -22,10 +22,7 @@ adopt = (greyhound, doa, callback) ->
       return callback "#{util.display(greyhound)} has already been adopted 😝"
 
     info.category = 'adopted'
-    if doa?
-      info.doa = new Date doa
-    else
-      info.doa = util.nowDate()
+    info.doa = if doa? new Date(doa) else util.nowDate()
     site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->

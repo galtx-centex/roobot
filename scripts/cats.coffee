@@ -23,7 +23,7 @@ cats = (greyhound, catsafe, callback) ->
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if info.cats is catsafe
-      return callback "#{util.display(greyhound)} is already #{catMessage(catsafe)} 😝"
+      return callback "#{util.display(greyhound)} is already #{catMessage(catsafe)}"
 
     info.cats = catsafe
     site.dumpGreyhound greyhound, info, bio, callback
@@ -31,10 +31,9 @@ cats = (greyhound, catsafe, callback) ->
 module.exports = (robot) ->
   robot.respond /cats (.+?)\s*(yes|no)?$/i, (res) ->
     greyhound = util.sanitize res.match[1]
-    if res.match[2]?
-      catsafe = res.match[2].toLowerCase() is 'yes'
-    else
-      catsafe = yes
+    catsafe = yes
+    if res.match[2]?.toLowerCase() is 'no'
+      catsafe = no
 
     gitOpts =
       message: "#{util.display(greyhound)} is #{catMessage(catsafe)}"

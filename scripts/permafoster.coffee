@@ -21,7 +21,7 @@ permafoster = (greyhound, callback) ->
     if info.category is 'adopted'
       return callback "#{util.display(greyhound)} has already been adopted 😝"
     if info.permafoster is yes
-      return callback "#{util.display(greyhound)} is already a permanent foster 🤕"
+      return callback "#{util.display(greyhound)} is already a permanent foster 😞"
 
     info.permafoster = yes
     site.dumpGreyhound greyhound, info, bio, callback
@@ -30,13 +30,13 @@ module.exports = (robot) ->
   robot.respond /permafoster (.*)/i, (res) ->
     greyhound = util.sanitize res.match[1]
     gitOpts =
-      message: "#{util.display(greyhound)} Permanent Foster 🤕"
+      message: "#{util.display(greyhound)} Permanent Foster 💜"
       branch: "permafoster-#{greyhound}"
       user:
         name: res.message.user?.real_name
         email: res.message.user?.profile?.email
 
-    res.reply "Labeling #{util.display(greyhound)} as a Permanent Foster 🤕\n" +
+    res.reply "Labeling #{util.display(greyhound)} as a Permanent Foster 💜\n" +
               "Hang on a sec..."
 
     git.update permafoster, greyhound, gitOpts, (update) ->

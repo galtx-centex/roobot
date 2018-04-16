@@ -43,10 +43,9 @@ pending = (greyhound, pending, callback) ->
 module.exports = (robot) ->
   robot.respond /pending (.+?)\s*(yes|no)?$/i, (res) ->
     greyhound = util.sanitize res.match[1]
-    if res.match[2]?
-      pend = res.match[2].toLowerCase() is 'yes'
-    else
-      pend = yes
+    pend = yes
+    if res.match[2]?.toLowerCase() is 'no'
+      pend = no
 
     gitOpts =
       message: "#{util.display(greyhound)} #{pendingMessage(pend)}"
