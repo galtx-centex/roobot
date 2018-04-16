@@ -74,6 +74,14 @@ commit = (repo, user, message) ->
     .catch (err) ->
       reject "Commit #{err}"
 
+tag = (repo, oid) ->
+  new Promise (resolve, reject) ->
+    repo.creatLightWeightTag oid, "#{oid}-tag"
+    .then (reference) ->
+      resolve reference
+    .catch (err) ->
+      reject "Tag #{err}"
+
 push = (repo, src, dst) ->
   new Promise (resolve, reject) ->
     repo.getRemote 'origin'
@@ -135,7 +143,9 @@ module.exports =
     .then () ->
       commit opts.repo, opts.user, opts.message
     .then (oid) ->
-      push opts.repo, oid, opts.branch
+      tag opts.repo, oid
+    .then (tag) ->
+      push opts.repo, tag, opts.branch
     .then () ->
       newPullRequest opts.message, opts.branch
     .then (pr) ->
