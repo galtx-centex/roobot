@@ -80,12 +80,7 @@ module.exports = (robot) ->
         gitOpts.message = "Add pic for #{util.display(greyhound)}! 😁"
         res.reply "Adding new pic for #{util.display(greyhound)}! 😁\n" +
                   "Hang on a sec..."
-        git.findPR gitOpts.branch, (pr, err) ->
-          if err?
-            return res.reply err
-          if pr?
-            gitOpts.pr = pr.head.ref
 
-          git.update addPic, greyhound, picUrl, gitOpts, (update) ->
-            res.reply update
+        git.update addPic, greyhound, picUrl, gitOpts, (update) ->
+          res.reply update
   )

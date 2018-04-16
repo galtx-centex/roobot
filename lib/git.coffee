@@ -105,7 +105,7 @@ newPullRequest = (title, head) ->
     .then ({data}) ->
       resolve data
     .catch (err) ->
-      reject "PR #{err}"
+      reject "New PR #{err}"
 
 findPullRequest = (head) ->
   new Promise (resolve, reject) ->
@@ -114,27 +114,20 @@ findPullRequest = (head) ->
     repo = github.getRepo repoName
     repo.listPullRequests {state: 'open', head: "galtx-centex:#{head}"}
     .then ({data}) ->
-      if data[0]?
-        resolve data[0]
-      else
-        reject "PR No #{head} Pull Request Found!"
+      resolve data[0] ? null
     .catch (err) ->
-      reject "PR #{err}"
+      reject "Find PR #{err}"
 
 module.exports =
-  findPR: (head, callback) ->
-    findPullRequest head
-    .then (pr) ->
-      console.log "Found PR #{pr.number}: #{pr.title}"
-      callback pr, null
-    .catch (err) ->
-      callback null, err
-
   update: (action, args..., opts, callback) ->
     fetch()
     .then (repo) ->
       opts.repo = repo
-      checkout opts.repo, opts.pr ? 'source'
+      findPullRequest opts.branch
+    .then (pr) ->
+      opts.pr = pr
+      opts.head = pr.head.ref
+      checkout opts.repo, opts.head ? 'source'
     .then (ref) ->
       new Promise (resolve, reject) ->
         action args..., (err) ->
@@ -149,7 +142,10 @@ module.exports =
     .then (tag) ->
       push opts.repo, tag, opts.branch
     .then () ->
-      newPullRequest opts.message, opts.branch unless opts.pr?
+      if opts.pr?
+        new Promise (resolve, reject) -> resolve(opts.pr)
+      else
+        newPullRequest opts.message, opts.branch
     .then (pr) ->
       callback "Pull Request ready ➜ #{pr.html_url}"
     .catch (err) ->
