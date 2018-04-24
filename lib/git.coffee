@@ -126,7 +126,7 @@ module.exports =
       findPullRequest opts.branch
     .then (pr) ->
       opts.pr = pr
-      opts.head = pr.head.ref
+      opts.head = pr?.head?.ref
       checkout opts.repo, opts.head ? 'source'
     .then (ref) ->
       new Promise (resolve, reject) ->
