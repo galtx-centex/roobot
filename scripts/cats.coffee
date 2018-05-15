@@ -29,10 +29,10 @@ cats = (greyhound, catsafe, callback) ->
     site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
-  robot.respond /cats (.+?)\s*(yes|no)?$/i, (res) ->
+  robot.respond /cats (.+?)(\s(yes|no))?$/i, (res) ->
     greyhound = util.sanitize res.match[1]
     catsafe = yes
-    if res.match[2]?.toLowerCase() is 'no'
+    if res.match[3]?.toLowerCase() is 'no'
       catsafe = no
 
     gitOpts =
