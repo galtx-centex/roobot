@@ -17,33 +17,34 @@ catMessage = (catsafe) ->
   else
     "not cat safe 😿"
 
-cats = (greyhound, catsafe, callback) ->
+cats = (greyhound, name, catsafe, callback) ->
   site.loadGreyhound greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if info.cats is catsafe
-      return callback "#{util.display(greyhound)} is already #{catMessage(catsafe)}"
+      return callback "#{name} is already #{catMessage(catsafe)}"
 
     info.cats = catsafe
     site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /cats (.+?)(\s(yes|no))?$/i, (res) ->
-    greyhound = util.sanitize res.match[1]
+    greyhound = util.slugify res.match[1]
+    name = util.capitalize res.match[1]
     catsafe = yes
     if res.match[3]?.toLowerCase() is 'no'
       catsafe = no
 
     gitOpts =
-      message: "#{util.display(greyhound)} is #{catMessage(catsafe)}"
+      message: "#{name} is #{catMessage(catsafe)}"
       branch: "cats-#{greyhound}"
       user:
         name: res.message.user?.real_name
         email: res.message.user?.profile?.email
 
-    res.reply "Labeling #{util.display(greyhound)} as #{catMessage(catsafe)}\n" +
+    res.reply "Labeling #{name} as #{catMessage(catsafe)}\n" +
               "Hang on a sec..."
 
-    git.update cats, greyhound, catsafe, gitOpts, (update) ->
+    git.update cats, greyhound, name, catsafe, gitOpts, (update) ->
       res.reply update

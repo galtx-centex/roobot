@@ -61,7 +61,8 @@ module.exports = (robot) ->
       msg.message?.subtype is 'file_share'
     (res) ->
       fileObj = res.message.message.file
-      greyhound = util.sanitize fileObj.title
+      greyhound = util.slugify fileObj.title
+      name = util.capitalize fileObj.title
       picUrl = fileObj.thumb_1024 ? fileObj.url_private
       gitOpts =
         branch: "arrival-#{greyhound}"
@@ -71,14 +72,14 @@ module.exports = (robot) ->
 
       if fileObj.initial_comment?
         info = site.newInfo greyhound, fileObj.initial_comment.comment
-        gitOpts.message = "Add #{util.display(greyhound)}! 🌟"
-        res.reply "Adding #{util.display(greyhound)} to Available Hounds! 🌟\n" +
+        gitOpts.message = "Add #{name}! 🌟"
+        res.reply "Adding #{name} to Available Hounds! 🌟\n" +
                   "Hang on a sec..."
         git.update arrival, greyhound, picUrl, info, gitOpts, (update) ->
           res.reply update
       else
-        gitOpts.message = "Add pic for #{util.display(greyhound)}! 😁"
-        res.reply "Adding new pic for #{util.display(greyhound)}! 😁\n" +
+        gitOpts.message = "Add pic for #{name}! 😁"
+        res.reply "Adding new pic for #{name}! 😁\n" +
                   "Hang on a sec..."
 
         git.update addPic, greyhound, picUrl, gitOpts, (update) ->

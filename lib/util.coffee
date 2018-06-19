@@ -2,6 +2,7 @@
 fs = require 'fs'
 url = require 'url'
 https = require 'https'
+slugify = require 'slugify'
 capitalize = require 'capitalize'
 
 module.exports =
@@ -27,8 +28,8 @@ module.exports =
       fs.unlink dest
       callback err.message
 
-  sanitize: (name) ->
-    return name.trim().toLowerCase().replace(/\s+/g, '-')
+  slugify: (name) ->
+    return slugify name
 
-  display: (name) ->
-    return capitalize.words(name.replace('-', ' '))
+  capitalize: (name) ->
+    return capitalize.words name

@@ -11,15 +11,15 @@ git = require '../lib/git'
 site = require '../lib/site'
 util = require '../lib/util'
 
-adopt = (greyhound, doa, callback) ->
+adopt = (greyhound, name, doa, callback) ->
   site.loadGreyhound greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     if info.category is 'deceased'
-      return callback "#{util.display(greyhound)} has crossed the Rainbow Bridge 😢"
+      return callback "#{name} has crossed the Rainbow Bridge 😢"
     if info.category is 'adopted'
-      return callback "#{util.display(greyhound)} has already been adopted 😝"
+      return callback "#{name} has already been adopted 😝"
 
     info.category = 'adopted'
     info.doa = if doa?
@@ -30,17 +30,18 @@ adopt = (greyhound, doa, callback) ->
 
 module.exports = (robot) ->
   robot.respond /adopt (.+?)\s*(\d{4}-\d{1,2}-\d{1,2})?$/i, (res) ->
-    greyhound = util.sanitize res.match[1]
+    greyhound = util.slugify res.match[1]
+    name = util.capitalize res.match[1]
     doa = res.match[2]
     gitOpts =
-      message: "#{util.display(greyhound)} Adopted! 💗"
+      message: "#{name} Adopted! 💗"
       branch: "adopt-#{greyhound}"
       user:
         name: res.message.user?.real_name
         email: res.message.user?.profile?.email
 
-    res.reply "Moving #{util.display(greyhound)} to Happy Tails! 💗\n" +
+    res.reply "Moving #{name} to Happy Tails! 💗\n" +
               "Hang on a sec..."
 
-    git.update adopt, greyhound, doa, gitOpts, (update) ->
+    git.update adopt, greyhound, name, doa, gitOpts, (update) ->
       res.reply update

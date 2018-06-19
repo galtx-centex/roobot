@@ -4,7 +4,6 @@ fs = require 'fs'
 path = require 'path'
 yaml = require 'yamljs'
 matter = require 'gray-matter'
-capitalize = require 'capitalize'
 
 util = require './util'
 
@@ -19,7 +18,7 @@ self = module.exports =
   newInfo: (greyhound, infoStr) ->
     info =
       layout: 'greyhound'
-      title: capitalize greyhound
+      title: util.capitalize greyhound
       date: util.nowDate()
       category: 'available'
     infoStr.toLowerCase().split(',').map (i) ->
