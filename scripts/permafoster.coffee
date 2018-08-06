@@ -40,5 +40,8 @@ module.exports = (robot) ->
     res.reply "Labeling #{name} as a Permanent Foster 💜\n" +
               "Hang on a sec..."
 
-    git.update permafoster, greyhound, name, gitOpts, (update) ->
-      res.reply update
+    git.update permafoster, greyhound, name, gitOpts, (err) ->
+      unless err?
+        res.reply "#{name} labeled as a Permanent Foster 💜"
+      else
+        res.reply err

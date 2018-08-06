@@ -38,5 +38,8 @@ module.exports = (robot) ->
     res.reply "Moving #{name} to the Rainbow Bridge 😢\n" +
               "Hang on a sec..."
 
-    git.update goodbye, greyhound, name, dod, gitOpts, (update) ->
-      res.reply update
+    git.update goodbye, greyhound, name, dod, gitOpts, (err) ->
+      unless err?
+        res.reply "#{name} moved to the Rainbow Bridge 😢"
+      else
+        res.reply err

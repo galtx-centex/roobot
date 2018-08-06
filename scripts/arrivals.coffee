@@ -75,13 +75,13 @@ module.exports = (robot) ->
         gitOpts.message = "Add #{name}! 🌟"
         res.reply "Adding #{name} to Available Hounds! 🌟\n" +
                   "Hang on a sec..."
-        git.update arrival, greyhound, picUrl, info, gitOpts, (update) ->
+        git.review arrival, greyhound, picUrl, info, gitOpts, (update) ->
           res.reply update
       else
         gitOpts.message = "Add pic for #{name}! 😁"
         res.reply "Adding new pic for #{name}! 😁\n" +
                   "Hang on a sec..."
 
-        git.update addPic, greyhound, picUrl, gitOpts, (update) ->
+        git.review addPic, greyhound, picUrl, gitOpts, (update) ->
           res.reply update
   )

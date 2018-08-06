@@ -46,5 +46,8 @@ module.exports = (robot) ->
     res.reply "Labeling #{name} as #{catMessage(catsafe)}\n" +
               "Hang on a sec..."
 
-    git.update cats, greyhound, name, catsafe, gitOpts, (update) ->
-      res.reply update
+    git.update cats, greyhound, name, catsafe, gitOpts, (err) ->
+      unless err?
+        res.reply "#{name} labeled as #{catMessage(catsafe)}"
+      else
+        res.reply err

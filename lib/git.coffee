@@ -119,7 +119,7 @@ findPullRequest = (head) ->
       reject "Find PR #{err}"
 
 module.exports =
-  update: (action, args..., opts, callback) ->
+  review: (action, args..., opts, callback) ->
     fetch()
     .then (repo) ->
       opts.repo = repo
@@ -148,5 +148,28 @@ module.exports =
         newPullRequest opts.message, opts.branch
     .then (pr) ->
       callback "Pull Request ready ➜ #{pr.html_url}"
+    .catch (err) ->
+      callback err
+
+  update: (action, args..., opts, callback) ->
+    fetch()
+    .then (repo) ->
+      opts.repo = repo
+      checkout opts.repo, 'source'
+    .then (ref) ->
+      new Promise (resolve, reject) ->
+        action args..., (err) ->
+          unless err?
+            resolve()
+          else
+            reject err
+    .then () ->
+      commit opts.repo, opts.user, opts.message
+    .then (oid) ->
+      tag opts.repo, oid
+    .then (tag) ->
+      push opts.repo, tag, opts.branch
+    .then () ->
+      callback null
     .catch (err) ->
       callback err
