@@ -126,8 +126,12 @@ module.exports =
       findPullRequest opts.branch
     .then (pr) ->
       opts.pr = pr
-      opts.head = pr?.head?.ref
-      checkout opts.repo, opts.head ? 'source'
+      opts.head =
+        if pr?.head?
+          "origin/#{pr.head.ref}"
+        else
+          'origin/source'
+      checkout opts.repo, opts.head
     .then (ref) ->
       new Promise (resolve, reject) ->
         action args..., (err) ->
