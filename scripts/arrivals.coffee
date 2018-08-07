@@ -59,7 +59,7 @@ module.exports = (robot) ->
     (msg) ->
       msg.room is 'C5F138J1K' and msg.message?.rawMessage?.upload
     (res) ->
-      message = res.message
+      message = res.message.message
       file = message.rawMessage.files[0]
       greyhound = util.slugify file.title
       name = util.capitalize file.title
