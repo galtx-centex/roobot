@@ -40,7 +40,7 @@ fetch = () ->
 checkout = (repo, branch) ->
   new Promise (resolve, reject) ->
     ref = null
-    repo.getReference "origin/#{branch}"
+    repo.getReference branch
     .then (reference) ->
       ref = reference
       console.log "ref checkout #{ref}"
@@ -169,7 +169,7 @@ module.exports =
     .then (oid) ->
       tag opts.repo, oid
     .then (tag) ->
-      push opts.repo, tag, opts.ref
+      push opts.repo, opts.ref, opts.ref
     .then () ->
       callback null
     .catch (err) ->
