@@ -167,8 +167,6 @@ module.exports =
     .then () ->
       commit opts.repo, opts.user, opts.message
     .then (oid) ->
-      tag opts.repo, oid
-    .then (tag) ->
       push opts.repo, opts.ref, opts.ref
     .then () ->
       callback null
