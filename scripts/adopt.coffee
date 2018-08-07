@@ -45,6 +45,6 @@ module.exports = (robot) ->
 
     git.update adopt, greyhound, name, doa, gitOpts, (err) ->
       unless err?
-        res.reply "#{name} Moved to Happy Tails! 💗"
+        res.reply "#{name} moved to Happy Tails! 💗"
       else
         res.reply err
