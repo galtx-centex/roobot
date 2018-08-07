@@ -29,7 +29,7 @@ module.exports =
       callback err.message
 
   slugify: (name) ->
-    return slugify name
+    return slugify name, {lower: true}
 
   capitalize: (name) ->
     return capitalize.words name
