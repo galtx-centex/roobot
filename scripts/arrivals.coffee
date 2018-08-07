@@ -57,6 +57,7 @@ module.exports = (robot) ->
 
   robot.listen(
     (msg) ->
+      console.log "Heard something! %j" msg
       msg.message?.channel?.name is 'arrivals' and
       msg.message?.subtype is 'file_share'
     (res) ->
