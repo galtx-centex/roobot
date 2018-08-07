@@ -50,29 +50,27 @@ addPic = (greyhound, picUrl, callback) ->
 module.exports = (robot) ->
   # arrival help text
   robot.respond /add/i, (res) ->
-    res.reply "To add a greyhound, post a picture to #arrivals with the greyhound's name in the title and a comment in the format below:\n" +
+    res.reply "To add a greyhound, post a picture to #arrivals with the greyhound's name as the file name and a comment in the format below:\n" +
       "\n`sex = female|male, dob = 2017-01-21, color = white and black, cats = yes|no`\n\n" +
       "Notice the equals sign between each attribute and its value, and the commas separating each pair of attribute and value.\n" +
-      "If no comment is added, the picture will be added to the greyhound whose name is in the title."
+      "If no comment is added, the picture will be added to the greyhound whose name is the file name."
 
   robot.listen(
     (msg) ->
-      console.log "Heard something! %j", msg
-      msg.message?.channel?.name is 'arrivals' and
-      msg.message?.subtype is 'file_share'
+      msg.room is 'C5F138J1K' and msg.message?.rawMessage?.upload
     (res) ->
-      fileObj = res.message.message.file
-      greyhound = util.slugify fileObj.title
-      name = util.capitalize fileObj.title
-      picUrl = fileObj.thumb_1024 ? fileObj.url_private
+      file = res.message.rawMessage.files[0]
+      greyhound = util.slugify file.title
+      name = util.capitalize file.title
+      picUrl = file.thumb_1024 ? file.url_private
       gitOpts =
         branch: "arrival-#{greyhound}"
         user:
           name: res.message.user?.real_name
           email: res.message.user?.email_address
 
-      if fileObj.initial_comment?
-        info = site.newInfo greyhound, fileObj.initial_comment.comment
+      if res.message.text?
+        info = site.newInfo greyhound, res.message.text
         gitOpts.message = "Add #{name}! 🌟"
         res.reply "Adding #{name} to Available Hounds! 🌟\n" +
                   "Hang on a sec..."
@@ -82,7 +80,6 @@ module.exports = (robot) ->
         gitOpts.message = "Add pic for #{name}! 😁"
         res.reply "Adding new pic for #{name}! 😁\n" +
                   "Hang on a sec..."
-
         git.review addPic, greyhound, picUrl, gitOpts, (update) ->
           res.reply update
   )
