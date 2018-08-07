@@ -68,7 +68,7 @@ module.exports = (robot) ->
         branch: "arrival-#{greyhound}"
         user:
           name: res.message.user?.real_name
-          email: res.message.user?.profile?.email
+          email: res.message.user?.email_address
 
       if fileObj.initial_comment?
         info = site.newInfo greyhound, fileObj.initial_comment.comment

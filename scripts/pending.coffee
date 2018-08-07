@@ -47,7 +47,7 @@ module.exports = (robot) ->
       branch: "pending-#{greyhound}"
       user:
         name: res.message.user?.real_name
-        email: res.message.user?.profile?.email
+        email: res.message.user?.email_address
 
     res.reply "Labeling #{name} as #{pendingMessage(pend)}\n" +
               "Hang on a sec..."

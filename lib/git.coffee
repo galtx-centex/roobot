@@ -65,7 +65,7 @@ commit = (repo, user, message) ->
       tree = treeObj
       repo.getHeadCommit()
     .then (parent) ->
-      console.log "commit '#{message}'"
+      console.log "commit '#{message}' from <#{user.name} #{user.email}>"
       author = Git.Signature.now user.name, user.email
       committer = Git.Signature.now 'RooBot', 'roobot@galtx-centex.org'
       repo.createCommit 'HEAD', author, committer, message, tree, [parent]

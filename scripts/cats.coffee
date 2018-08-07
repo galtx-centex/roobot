@@ -41,7 +41,7 @@ module.exports = (robot) ->
       branch: "cats-#{greyhound}"
       user:
         name: res.message.user?.real_name
-        email: res.message.user?.profile?.email
+        email: res.message.user?.email_address
 
     res.reply "Labeling #{name} as #{catMessage(catsafe)}\n" +
               "Hang on a sec..."

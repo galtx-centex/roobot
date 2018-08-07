@@ -35,7 +35,7 @@ module.exports = (robot) ->
       branch: "permafoster-#{greyhound}"
       user:
         name: res.message.user?.real_name
-        email: res.message.user?.profile?.email
+        email: res.message.user?.email_address
 
     res.reply "Labeling #{name} as a Permanent Foster 💜\n" +
               "Hang on a sec..."
