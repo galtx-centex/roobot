@@ -39,7 +39,6 @@ module.exports = (robot) ->
               "Hang on a sec..."
 
     git.update goodbye, greyhound, name, dod, gitOpts, (err) ->
-      console.log "result: #{err}"
       unless err?
         res.reply "#{name} moved to the Rainbow Bridge 😢"
       else
