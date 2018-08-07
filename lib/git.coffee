@@ -127,7 +127,7 @@ module.exports =
     .then (pr) ->
       opts.pr = pr
       opts.head = pr?.head?.ref
-      checkout opts.repo, opts.head ? 'source'
+      checkout opts.repo, "origin/#{opts.head}" ? 'source'
     .then (ref) ->
       new Promise (resolve, reject) ->
         action args..., (err) ->
