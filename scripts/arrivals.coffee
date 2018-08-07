@@ -67,8 +67,8 @@ module.exports = (robot) ->
       gitOpts =
         branch: "arrival-#{greyhound}"
         user:
-          name: res.message.user?.real_name
-          email: res.message.user?.email_address
+          name: message.user?.real_name
+          email: message.user?.email_address
 
       if message.text
         info = site.newInfo greyhound, message.text
