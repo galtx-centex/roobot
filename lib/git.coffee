@@ -85,7 +85,7 @@ tag = (repo, oid) ->
 
 push = (repo, src, dst) ->
   new Promise (resolve, reject) ->
-    refSpec = "#{src}:refs/heads/#{dst}"
+    refSpec = "#{src}:#{dst}"
     repo.getRemote 'origin'
     .then (remote) ->
       console.log "push origin #{refSpec}"
@@ -140,7 +140,7 @@ module.exports =
     .then (oid) ->
       tag opts.repo, oid
     .then (tag) ->
-      push opts.repo, tag, opts.branch
+      push opts.repo, tag, "refs/heads/#{opts.branch}"
     .then () ->
       if opts.pr?
         new Promise (resolve, reject) -> resolve(opts.pr)
@@ -157,6 +157,7 @@ module.exports =
       opts.repo = repo
       checkout opts.repo, 'source'
     .then (ref) ->
+      opts.ref = ref
       new Promise (resolve, reject) ->
         action args..., (err) ->
           unless err?
@@ -168,7 +169,7 @@ module.exports =
     .then (oid) ->
       tag opts.repo, oid
     .then (tag) ->
-      push opts.repo, tag, 'source'
+      push opts.repo, tag, opts.ref
     .then () ->
       callback null
     .catch (err) ->
