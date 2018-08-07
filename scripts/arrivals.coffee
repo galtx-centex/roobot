@@ -59,8 +59,8 @@ module.exports = (robot) ->
     (msg) ->
       msg.room is 'C5F138J1K' and msg.message?.rawMessage?.upload
     (res) ->
-      console.log "Respond! %j", res.message
-      file = res.message.rawMessage.files[0]
+      message = res.message
+      file = message.rawMessage.files[0]
       greyhound = util.slugify file.title
       name = util.capitalize file.title
       picUrl = file.thumb_1024 ? file.url_private
@@ -70,8 +70,8 @@ module.exports = (robot) ->
           name: res.message.user?.real_name
           email: res.message.user?.email_address
 
-      if res.message.text?
-        info = site.newInfo greyhound, res.message.text
+      if message.text
+        info = site.newInfo greyhound, message.text
         gitOpts.message = "Add #{name}! 🌟"
         res.reply "Adding #{name} to Available Hounds! 🌟\n" +
                   "Hang on a sec..."
