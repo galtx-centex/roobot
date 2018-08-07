@@ -168,7 +168,7 @@ module.exports =
     .then (oid) ->
       tag opts.repo, oid
     .then (tag) ->
-      push opts.repo, tag, 'source'
+      push opts.repo, tag, opts.branch
     .then () ->
       callback null
     .catch (err) ->

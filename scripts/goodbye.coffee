@@ -28,6 +28,7 @@ module.exports = (robot) ->
     greyhound = util.slugify res.match[1]
     name = util.capitalize res.match[1]
     dod = res.match[2]
+    console.log "user: #{res.message.user}"
     gitOpts =
       message: "#{name} crossed the Rainbow Bridge 😢"
       branch: "goodbye-#{greyhound}"
