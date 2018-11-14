@@ -15,10 +15,10 @@ engines =
 self = module.exports =
   sitePath: path.join __dirname, 'galtx-centex.org'
 
-  newInfo: (greyhound, infoStr) ->
+  newInfo: (name, infoStr) ->
     info =
       layout: 'greyhound'
-      title: util.capitalize greyhound
+      title: name
       date: util.nowDate()
       category: 'available'
     infoStr.toLowerCase().split(',').map (i) ->

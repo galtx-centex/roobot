@@ -71,7 +71,7 @@ module.exports = (robot) ->
           email: message.user?.email_address
 
       if message.text
-        info = site.newInfo greyhound, message.text
+        info = site.newInfo name, message.text
         gitOpts.message = "Add #{name}! 🌟"
         res.reply "Adding #{name} to Available Hounds! 🌟\n" +
                   "Hang on a sec..."
