@@ -26,8 +26,10 @@ medicalHold = (greyhound, name, medicalhold, callback) ->
       return callback "#{name} has crossed the Rainbow Bridge 😢"
     if info.category is 'adopted'
       return callback "#{name} has already been adopted 😝"
+    if info.permafoster is yes
+      return callback "#{name} is a permanent foster 😕\nRemove #{name} permanent foster status first with `@roobot permafoster #{greyhound} no`"
     if info.pending is yes
-      return callback "#{name} is pending adoption 😕\nTry removing #{name} from pending adoption with `@roobot pending #{greyhound} no`"
+      return callback "#{name} is pending adoption 😕\nRemove #{name} pending adoption status first with `@roobot pending #{greyhound} no`"
     if medicalhold and info.medicalhold is yes
       return callback "#{name} is already in medical hold 🤕"
     if not medicalhold and info.medicalhold is no
