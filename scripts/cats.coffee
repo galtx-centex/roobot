@@ -2,7 +2,7 @@
 #   Label a greyhound as cat safe or not
 #
 # Commands:
-#   hubot cats <greyhound> (yes/no)- Label a greyhound as cat safe or not
+#   hubot cats <greyhound> (yes/no) - Label a greyhound as cat safe or not
 #
 # Author:
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail.com>
