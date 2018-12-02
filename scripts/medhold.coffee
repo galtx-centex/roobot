@@ -56,7 +56,7 @@ module.exports = (robot) ->
     res.reply "Labeling #{name} as #{medholdMessage(medhold)}\n" +
               "Hang on a sec..."
 
-    git.update medicalhold, greyhound, name, medhold, gitOpts, (err) ->
+    git.update medicalHold, greyhound, name, medhold, gitOpts, (err) ->
       unless err?
         res.reply "#{name} labeled as #{medholdMessage(medhold)}"
       else
