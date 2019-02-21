@@ -53,7 +53,10 @@ self = module.exports =
 
   dumpGreyhound: (greyhound, info, bio, callback) ->
     file = "#{self.sitePath}/_greyhounds/#{greyhound}.md"
-    data = matter.stringify bio, info, engines: engines
+    try
+      data = matter.stringify bio, info, engines: engines
+    catch err
+      return callback err
     console.log "Dump #{greyhound}"
     fs.writeFile file, data, (err) ->
       callback err
