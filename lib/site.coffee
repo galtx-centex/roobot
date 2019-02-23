@@ -15,10 +15,9 @@ engines =
 self = module.exports =
   sitePath: path.join __dirname, 'galtx-centex.org'
 
-  newInfo: (name, infoStr) ->
+  newInfo: (infoStr) ->
     info =
       layout: 'greyhound'
-      title: name
       date: util.nowDate()
       category: 'available'
     infoStr.toLowerCase().split(',').map (i) ->
@@ -31,6 +30,7 @@ self = module.exports =
             val is 'yes'
           else
             val
+    info.title = info.name
     return info
 
   newGreyhound: (greyhound) ->

@@ -1,6 +1,5 @@
 # Description:
 #   Add a greyhound to the Available Hounds page
-#   Add a picture to a greyhound's bio
 #
 # Commands:
 #   hubot add - Show help text to add a greyhound
@@ -50,10 +49,9 @@ addPic = (greyhound, picUrl, callback) ->
 module.exports = (robot) ->
   # arrival help text
   robot.respond /add/i, (res) ->
-    res.reply "To add a greyhound, post a picture to #arrivals with the greyhound's name as the file name and a comment in the format below:\n" +
-      "\n`sex = female|male, dob = 2017-01-21, color = white and black, cats = yes|no`\n\n" +
-      "Notice the equals sign between each attribute and its value, and the commas separating each pair of attribute and value.\n" +
-      "If no comment is added, the picture will be added to the greyhound whose name is the file name."
+    res.reply "To add a greyhound, post a picture to #arrivals with a comment in the format below:\n" +
+      "\n`name = Name, sex = female/male, dob = YYYY-MM-DD, color = white and black, cats = yes/no`\n\n" +
+      "Notice the equals sign between each attribute and its value, and the commas separating each pair of attribute and value."
 
   robot.listen(
     (msg) ->
@@ -61,26 +59,18 @@ module.exports = (robot) ->
     (res) ->
       message = res.message.message
       file = message.rawMessage.files[0]
-      greyhound = util.slugify file.title
-      name = util.capitalize file.title
+      info = site.newInfo message.text
+      greyhound = util.slugify info.name
+      name = util.capitalize info.name
       picUrl = file.thumb_1024 ? file.url_private
       gitOpts =
         branch: "arrival-#{greyhound}"
         user:
           name: message.user?.real_name
           email: message.user?.email_address
-
-      if message.text
-        info = site.newInfo name, message.text
-        gitOpts.message = "Add #{name}! 🌟"
-        res.reply "Adding #{name} to Available Hounds! 🌟\n" +
-                  "Hang on a sec..."
-        git.review arrival, greyhound, picUrl, info, gitOpts, (update) ->
-          res.reply update
-      else
-        gitOpts.message = "Add pic for #{name}! 😁"
-        res.reply "Adding new pic for #{name}! 😁\n" +
-                  "Hang on a sec..."
-        git.review addPic, greyhound, picUrl, gitOpts, (update) ->
-          res.reply update
+      gitOpts.message = "Add #{name}! 🌟"
+      res.reply "Adding #{name} to Available Hounds! 🌟\n" +
+                "Hang on a sec..."
+      git.review arrival, greyhound, picUrl, info, gitOpts, (update) ->
+        res.reply update
   )
