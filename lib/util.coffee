@@ -8,7 +8,16 @@ capitalize = require 'capitalize'
 module.exports =
   nowDate: () ->
     now = new Date()
-    return new Date Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+    new Date Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
+
+  thisDate: (dateString) ->
+    # mm/dd/yyyy
+    dateRegex = /(\d{1,2})\/(\d{1,2})\/(\d{4})/
+    match = dateRegex.exec(dateString)
+    month = parseInt(match[1], 10)
+    day = parseInt(match[2], 10)
+    year = parseInt(match[3], 10)
+    new Date(year, month - 1, day)
 
   download: (src, dest, callback) ->
     console.log "Download #{src}"

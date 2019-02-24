@@ -25,7 +25,7 @@ self = module.exports =
       info[key] =
         switch key
           when 'dob','doa','dod'
-            new Date val
+            util.thisDate(val)
           when 'cats','pending','permafoster'
             val is 'yes'
           else

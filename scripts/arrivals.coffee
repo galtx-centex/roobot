@@ -50,7 +50,7 @@ module.exports = (robot) ->
   # arrival help text
   robot.respond /add/i, (res) ->
     res.reply "To add a greyhound, post a picture to #arrivals with a comment in the format below:\n" +
-      "\n`name = Name, sex = female/male, dob = YYYY-MM-DD, color = white and black, cats = yes/no`\n\n" +
+      "\n`name = Name, sex = female/male, dob = m/d/yyyy, color = white and black, cats = yes/no`\n\n" +
       "Notice the equals sign between each attribute and its value, and the commas separating each pair of attribute and value."
 
   robot.listen(

@@ -2,7 +2,7 @@
 #   Move an deceased greyhound to the Rainbow Bridge page
 #
 # Commands:
-#   hubot goodbye <greyhound> [yyyy-mm-dd] - Moves a deceased greyhound to the Rainbow Bridge page
+#   hubot goodbye <greyhound> [m/d/yyyy] - Moves a deceased greyhound to the Rainbow Bridge page
 #
 # Author:
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail.com>
@@ -20,11 +20,11 @@ goodbye = (greyhound, name, dod, callback) ->
       return callback "#{name} has already crossed the Rainbow Bridge 😢"
 
     info.category = 'deceased'
-    info.dod = new Date(dod) if dod?
+    info.dod = util.thisDate(dod) if dod?
     site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
-  robot.respond /goodbye (.+?)\s*(\d{4}-\d{1,2}-\d{1,2})?$/i, (res) ->
+  robot.respond /goodbye (.+?)\s*(\d{1,2}\/\d{1,2}\/\d{4})?$/i, (res) ->
     greyhound = util.slugify res.match[1]
     name = util.capitalize res.match[1]
     dod = res.match[2]

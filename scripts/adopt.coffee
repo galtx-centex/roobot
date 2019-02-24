@@ -2,7 +2,7 @@
 #   Move an adopted greyhound to the Happy Tails page
 #
 # Commands:
-#   hubot adopt <greyhound> [yyyy-mm-dd] - Moves an adopted greyhound to the Happy Tails page
+#   hubot adopt <greyhound> [m/d/yyyy] - Moves an adopted greyhound to the Happy Tails page
 #
 # Author:
 #   Zach Whaley (zachwhaley) <zachbwhaley@gmail.com>
@@ -22,14 +22,14 @@ adopt = (greyhound, name, doa, callback) ->
       return callback "#{name} has already been adopted 😝"
 
     info.category = 'adopted'
-    info.doa = if doa?
-      new Date(doa)
+    info.doa = doa?
+      util.thisDate(doa)
     else
       util.nowDate()
     site.dumpGreyhound greyhound, info, bio, callback
 
 module.exports = (robot) ->
-  robot.respond /adopt (.+?)\s*(\d{4}-\d{1,2}-\d{1,2})?$/i, (res) ->
+  robot.respond /adopt (.+?)\s*(\d{1,2}\/\d{1,2}\/\d{4})?$/i, (res) ->
     greyhound = util.slugify res.match[1]
     name = util.capitalize res.match[1]
     doa = res.match[2]
