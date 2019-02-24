@@ -22,7 +22,7 @@ adopt = (greyhound, name, doa, callback) ->
       return callback "#{name} has already been adopted 😝"
 
     info.category = 'adopted'
-    info.doa = doa?
+    info.doa = if doa?
       util.thisDate(doa)
     else
       util.nowDate()
