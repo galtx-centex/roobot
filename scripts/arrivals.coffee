@@ -61,7 +61,7 @@ module.exports = (robot) ->
       file = message.rawMessage.files[0]
       info = site.newInfo message.text
       greyhound = util.slugify info.name
-      name = util.capitalize info.name
+      name = info.title
       picUrl = file.thumb_1024 ? file.url_private
       gitOpts =
         branch: "arrival-#{greyhound}"

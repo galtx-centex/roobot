@@ -30,7 +30,7 @@ self = module.exports =
             val is 'yes'
           else
             val
-    info.title = info.name
+    info.title = util.capitalize info.name
     return info
 
   newGreyhound: (greyhound) ->
