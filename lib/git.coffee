@@ -4,7 +4,6 @@ fs = require 'fs'
 path = require 'path'
 Git = require 'nodegit'
 GitHub = require 'github-api'
-Promise = require 'bluebird'
 
 repoName = 'galtx-centex/galtx-centex.github.io'
 repoURL = "https://github.com/#{repoName}.git"
