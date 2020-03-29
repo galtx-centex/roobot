@@ -142,7 +142,9 @@ module.exports =
     .catch (err) ->
       callback err
     .finally ->
+      console.log "Remove #{clonePath}"
       fse.remove clonePath
+      console.log "Done"
 
   update: (action, args..., opts, callback) ->
     clonePath = "#{repoPath}-#{opts.branch}-#{Date.now()}"
@@ -153,7 +155,7 @@ module.exports =
     .then (ref) ->
       opts.ref = ref
       new Promise (resolve, reject) ->
-        action args..., (err) ->
+        action clonePath, args..., (err) ->
           unless err?
             resolve()
           else
@@ -167,4 +169,6 @@ module.exports =
     .catch (err) ->
       callback err
     .finally ->
+      console.log "Remove #{clonePath}"
       fse.remove clonePath
+      console.log "Done"
