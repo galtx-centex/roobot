@@ -11,8 +11,8 @@ git = require '../lib/git'
 site = require '../lib/site'
 util = require '../lib/util'
 
-adopt = (greyhound, name, doa, callback) ->
-  site.loadGreyhound greyhound, (info, bio) ->
+adopt = (path, greyhound, name, doa, callback) ->
+  site.loadGreyhound path, greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -26,7 +26,7 @@ adopt = (greyhound, name, doa, callback) ->
       util.thisDate(doa)
     else
       util.nowDate()
-    site.dumpGreyhound greyhound, info, bio, callback
+    site.dumpGreyhound path, greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /adopt (.+?)\s*(\d{1,2}\/\d{1,2}\/\d{4})?$/i, (res) ->

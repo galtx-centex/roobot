@@ -17,8 +17,8 @@ medholdMessage = (medicalhold) ->
   else
     "not in Medical Hold 😃"
 
-medicalHold = (greyhound, name, medicalhold, callback) ->
-  site.loadGreyhound greyhound, (info, bio) ->
+medicalHold = (path, greyhound, name, medicalhold, callback) ->
+  site.loadGreyhound path, greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -36,7 +36,7 @@ medicalHold = (greyhound, name, medicalhold, callback) ->
       return callback "#{name} is already not in medical hold 😃"
 
     info.medicalhold = medicalhold
-    site.dumpGreyhound greyhound, info, bio, callback
+    site.dumpGreyhound path, greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /medhold (.+?)(\s(yes|no))?$/i, (res) ->

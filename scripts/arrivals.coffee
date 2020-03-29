@@ -15,36 +15,36 @@ git = require '../lib/git'
 site = require '../lib/site'
 util = require '../lib/util'
 
-arrival = (greyhound, picUrl, info, callback) ->
-  fileName = site.newGreyhound greyhound
+arrival = (sitePath, greyhound, picUrl, info, callback) ->
+  fileName = site.newGreyhound sitePath, greyhound
   picName = "#{fileName}#{path.extname(picUrl)}"
-  picPath = "#{site.sitePath}/img/#{picName}"
+  picPath = "#{sitePath}/img/#{picName}"
   info.pic = picName
 
   util.download picUrl, picPath, (err) ->
     if err?
       return callback "Download Error: #{err}"
     # Make thumbnail
-    thmPath = "#{site.sitePath}/img/thm/#{picName}"
+    thmPath = "#{sitePath}/img/thm/#{picName}"
     image.convert [picPath, '-thumbnail', '300x300^', '-gravity', 'center', '-extent', '300x300', thmPath], (err) ->
       if err?
         return callback "Thumbnail Error: #{err}"
-      site.dumpGreyhound fileName, info, "", callback
+      site.dumpGreyhound sitePath, fileName, info, "", callback
 
-addPic = (greyhound, picUrl, callback) ->
-  site.loadGreyhound greyhound, (info, bio) ->
+addPic = (sitePath, greyhound, picUrl, callback) ->
+  site.loadGreyhound sitePath, greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
     picNum = info.pics?.length ? 0
     picName = "#{greyhound}_#{picNum + 1}#{path.extname(picUrl)}"
-    picPath = "#{site.sitePath}/img/#{picName}"
+    picPath = "#{sitePath}/img/#{picName}"
 
     util.download picUrl, picPath, (err) ->
       if err?
         return callback "Download Error: #{err}"
       info.pics = [picName] unless info.pics?.push picName
-      site.dumpGreyhound greyhound, info, bio, callback
+      site.dumpGreyhound sitePath, greyhound, info, bio, callback
 
 module.exports = (robot) ->
   # arrival help text

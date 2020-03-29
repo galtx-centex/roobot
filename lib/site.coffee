@@ -1,7 +1,6 @@
 # Modify website files
 
 fs = require 'fs'
-path = require 'path'
 yaml = require 'yamljs'
 matter = require 'gray-matter'
 
@@ -11,9 +10,6 @@ engines =
   yaml:
     parse: yaml.parse.bind(yaml)
     stringify: yaml.dump.bind(yaml)
-
-self = module.exports =
-  sitePath: path.join __dirname, 'galtx-centex.org'
 
   newInfo: (infoStr) ->
     info =
@@ -33,17 +29,17 @@ self = module.exports =
     info.title = util.capitalize info.name
     return info
 
-  newGreyhound: (greyhound) ->
+  newGreyhound: (path, greyhound) ->
     num = 0
     fileName = greyhound
-    while fs.existsSync "#{self.sitePath}/_greyhounds/#{fileName}.md"
+    while fs.existsSync "#{path}/_greyhounds/#{fileName}.md"
       num += 1
       fileName = "#{greyhound}#{num}"
     console.log "New greyhound #{fileName}"
     return fileName
 
-  loadGreyhound: (greyhound, callback) ->
-    file = "#{self.sitePath}/_greyhounds/#{greyhound}.md"
+  loadGreyhound: (path, greyhound, callback) ->
+    file = "#{path}/_greyhounds/#{greyhound}.md"
     fs.readFile file, 'utf8', (err, data) ->
       if err
         return callback null, null
@@ -51,8 +47,8 @@ self = module.exports =
       info = matter data, engines: engines
       callback info.data, info.content
 
-  dumpGreyhound: (greyhound, info, bio, callback) ->
-    file = "#{self.sitePath}/_greyhounds/#{greyhound}.md"
+  dumpGreyhound: (path, greyhound, info, bio, callback) ->
+    file = "#{path}/_greyhounds/#{greyhound}.md"
     try
       data = matter.stringify bio, info, engines: engines
     catch err

@@ -17,8 +17,8 @@ catMessage = (catsafe) ->
   else
     "not cat safe 😿"
 
-cats = (greyhound, name, catsafe, callback) ->
-  site.loadGreyhound greyhound, (info, bio) ->
+cats = (path, greyhound, name, catsafe, callback) ->
+  site.loadGreyhound path, greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -26,7 +26,7 @@ cats = (greyhound, name, catsafe, callback) ->
       return callback "#{name} is already #{catMessage(catsafe)}"
 
     info.cats = catsafe
-    site.dumpGreyhound greyhound, info, bio, callback
+    site.dumpGreyhound path, greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /cats (.+?)(\s(yes|no))?$/i, (res) ->

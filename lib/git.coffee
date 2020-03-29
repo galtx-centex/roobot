@@ -121,7 +121,7 @@ module.exports =
       checkout opts.repo, opts.head
     .then (ref) ->
       new Promise (resolve, reject) ->
-        action args..., (err) ->
+        action clonePath, args..., (err) ->
           unless err?
             resolve()
           else

@@ -11,8 +11,8 @@ git = require '../lib/git'
 site = require '../lib/site'
 util = require '../lib/util'
 
-permafoster = (greyhound, name, callback) ->
-  site.loadGreyhound greyhound, (info, bio) ->
+permafoster = (path, greyhound, name, callback) ->
+  site.loadGreyhound path, greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -24,7 +24,7 @@ permafoster = (greyhound, name, callback) ->
       return callback "#{name} is already a permanent foster 😞"
 
     info.permafoster = yes
-    site.dumpGreyhound greyhound, info, bio, callback
+    site.dumpGreyhound path, greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /permafoster (.*)/i, (res) ->

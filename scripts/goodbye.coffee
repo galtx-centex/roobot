@@ -11,8 +11,8 @@ git = require '../lib/git'
 site = require '../lib/site'
 util = require '../lib/util'
 
-goodbye = (greyhound, name, dod, callback) ->
-  site.loadGreyhound greyhound, (info, bio) ->
+goodbye = (path, greyhound, name, dod, callback) ->
+  site.loadGreyhound path, greyhound, (info, bio) ->
     if not info?
       return callback "Sorry, couldn't find #{greyhound} 😕"
 
@@ -21,7 +21,7 @@ goodbye = (greyhound, name, dod, callback) ->
 
     info.category = 'deceased'
     info.dod = util.thisDate(dod) if dod?
-    site.dumpGreyhound greyhound, info, bio, callback
+    site.dumpGreyhound path, greyhound, info, bio, callback
 
 module.exports = (robot) ->
   robot.respond /goodbye (.+?)\s*(\d{1,2}\/\d{1,2}\/\d{4})?$/i, (res) ->
