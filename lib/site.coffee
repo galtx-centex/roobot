@@ -11,6 +11,7 @@ engines =
     parse: yaml.parse.bind(yaml)
     stringify: yaml.dump.bind(yaml)
 
+module.exports =
   newInfo: (infoStr) ->
     info =
       layout: 'greyhound'
