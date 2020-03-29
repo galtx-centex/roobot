@@ -1,6 +1,7 @@
 # Git commands
 
 fs = require 'fs'
+fse = require 'fs-extra'
 path = require 'path'
 Git = require 'nodegit'
 GitHub = require 'github-api'
@@ -12,29 +13,15 @@ repoPath = path.join __dirname, 'galtx-centex.org'
 auth = (url, username) ->
   Git.Cred.userpassPlaintextNew process.env.GITHUB_TOKEN, 'x-oauth-basic'
 
-fetch = () ->
+clone = (clonePath) ->
   new Promise (resolve, reject) ->
+    console.log "clone #{repoURL} to #{clonePath}"
     cloneOpts = fetchOpts: callbacks: credentials: auth
-    fs.stat repoPath, (err, stats) ->
-      if err
-        # Clone
-        console.log "clone #{repoURL} to #{repoPath}"
-        Git.Clone.clone repoURL, repoPath, cloneOpts
-        .then (repo) ->
-          resolve repo
-        .catch (err) ->
-          reject "Clone #{err}"
-      else
-        # Fetch
-        repo = null
-        console.log "open #{repoPath}"
-        Git.Repository.open repoPath
-        .then (repo) ->
-          console.log "fetch all"
-          repo.fetchAll cloneOpts.fetchOpts
-          resolve repo
-        .catch (err) ->
-          reject "Fetch #{err}"
+    Git.Clone.clone repoURL, clonePath, cloneOpts
+    .then (repo) ->
+      resolve repo
+    .catch (err) ->
+      reject "Clone #{err}"
 
 checkout = (repo, branch) ->
   new Promise (resolve, reject) ->
@@ -119,7 +106,8 @@ findPullRequest = (head) ->
 
 module.exports =
   review: (action, args..., opts, callback) ->
-    fetch()
+    clonePath = "#{repoPath}-#{opts.branch}-#{Date.now()}"
+    clone clonePath
     .then (repo) ->
       opts.repo = repo
       findPullRequest opts.branch
@@ -153,9 +141,12 @@ module.exports =
       callback "Pull Request ready ➜ #{pr.html_url}"
     .catch (err) ->
       callback err
+    .finally ->
+      fse.remove clonePath
 
   update: (action, args..., opts, callback) ->
-    fetch()
+    clonePath = "#{repoPath}-#{opts.branch}-#{Date.now()}"
+    clone clonePath
     .then (repo) ->
       opts.repo = repo
       checkout opts.repo, 'source'
@@ -175,3 +166,5 @@ module.exports =
       callback null
     .catch (err) ->
       callback err
+    .finally ->
+      fse.remove clonePath
