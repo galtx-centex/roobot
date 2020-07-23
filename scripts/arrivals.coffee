@@ -55,6 +55,8 @@ module.exports = (robot) ->
 
   robot.listen(
     (msg) ->
+      if msg.room is 'C5F138J1K'
+        console.log msg
       msg.room is 'C5F138J1K' and msg.message?.rawMessage?.upload
     (res) ->
       message = res.message.message
