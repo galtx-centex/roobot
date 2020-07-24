@@ -55,8 +55,6 @@ module.exports = (robot) ->
 
   robot.listen(
     (msg) ->
-      if msg.room is 'C5F138J1K'
-        console.log msg
       msg.room is 'C5F138J1K' and msg.message?.rawMessage?.files?.length > 0
     (res) ->
       message = res.message.message
