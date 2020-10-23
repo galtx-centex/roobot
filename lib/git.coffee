@@ -87,7 +87,7 @@ newPullRequest = (title, head) ->
     console.log "open PR #{title}"
     github = new GitHub {token: process.env.GITHUB_TOKEN}
     repo = github.getRepo repoName
-    repo.createPullRequest {title: title, head: head, base: 'source'}
+    repo.createPullRequest {title: title, head: head, base: 'main'}
     .then ({data}) ->
       resolve data
     .catch (err) ->
@@ -117,7 +117,7 @@ module.exports =
         if pr?.head?
           "origin/#{pr.head.ref}"
         else
-          'origin/source'
+          'origin/main'
       checkout opts.repo, opts.head
     .then (ref) ->
       new Promise (resolve, reject) ->
@@ -151,7 +151,7 @@ module.exports =
     clone clonePath
     .then (repo) ->
       opts.repo = repo
-      checkout opts.repo, 'source'
+      checkout opts.repo, 'main'
     .then (ref) ->
       opts.ref = ref
       new Promise (resolve, reject) ->
