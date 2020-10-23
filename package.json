@@ -8,7 +8,7 @@
   "dependencies": {
     "capitalize": "^2.0.3",
     "coffeelint": "^2.1.0",
-    "coffeescript": "^2.5.1",
+    "coffeescript": "^1.12.7",
     "dateformat": "^3.0.3",
     "fs-extra": "^9.0.1",
     "github-api": "^3.3.0",
